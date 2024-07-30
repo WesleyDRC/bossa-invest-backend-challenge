@@ -1,0 +1,38 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: app.dockerfile
+    container_name: mentoring-platform-app
+    volumes:
+      - .:/app
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - mysql-database
+    environment:
+      - MYSQL_HOST=mysql-database
+    networks:
+      - mentoring-platform-network
+    command: ["npm", "start"]  
+
+  mysql-database:
+    image: mysql:5.7
+    container_name: mentoring-platform-mysql-database
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - ${DB_PORT}:${DB_PORT} 
+    volumes:
+      - mentoring-platform-volume:/var/lib/mysql
+    networks:
+      - mentoring-platform-network
+
+volumes:
+  mentoring-platform-volume:
+networks:
+  mentoring-platform-network:
+    driver: bridge
