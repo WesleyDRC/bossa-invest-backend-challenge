@@ -3,7 +3,7 @@ import { IMentorAvailability } from "../domain/IMentorAvailability"
 
 export interface IMentorAvailabilityRepository {
 	create(mentoringSession: IStoreMentorAvailabilityDto): Promise<IMentorAvailability>
-	findByMentorId(mentorId: string): Promise<IMentorAvailability[] | []>
-	findByMentorIdAndDay({mentorId, availableDay }): Promise<IMentorAvailability[]>
-	findAvailableMentoringBySkill(skill: string): Promise<IMentorAvailability[]>
+	getAvailabilityByMentorId(mentorId: string): Promise<IMentorAvailability[] | []>
+	getAvailabilityByMentorIdAndDate({mentorId, availableDay }): Promise<IMentorAvailability[]>
+	getAvailableMentorsBySkill(skill: string): Promise<IMentorAvailability[]>
 }

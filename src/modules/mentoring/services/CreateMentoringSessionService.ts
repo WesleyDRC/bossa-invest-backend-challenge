@@ -69,7 +69,7 @@ export class CreateMentoringSessionService {
 			throw new AppError(userConstants.MENTOR_SKILL_NOT_FOUND, 404);
 		}
 
-		const mentorAvailability = await this.mentorAvailabilityRepository.findByMentorId(mentorId)
+		const mentorAvailability = await this.mentorAvailabilityRepository.getAvailabilityByMentorId(mentorId)
 
 		const isAvailableDay = mentorAvailability.find((avaiability: IMentorAvailability) => {
 			return avaiability.availableDay === scheduledAt

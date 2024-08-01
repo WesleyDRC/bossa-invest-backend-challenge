@@ -39,7 +39,7 @@ export class CreateMentorAvailabilityService {
 			throw new AppError(mentoringConstants.HOURS_ERROR, 403)
 		}
 
-		const existingAvailabilities = await this.mentorAvailabilityRepository.findByMentorIdAndDay({
+		const existingAvailabilities = await this.mentorAvailabilityRepository.getAvailabilityByMentorIdAndDate({
 			mentorId,
 			availableDay
 		})

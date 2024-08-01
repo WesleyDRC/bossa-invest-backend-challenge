@@ -42,7 +42,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
 		}
 	}
 
-	async findByMentorId(mentorId: string): Promise<IMentorAvailability[] | []> {
+	async getAvailabilityByMentorId(mentorId: string): Promise<IMentorAvailability[] | []> {
 		const mentorAvailabilityFound = await this.ormRepository.createQueryBuilder('mentor_availability')
 			.leftJoinAndSelect('mentor_availability.mentor', 'user')
 			.where('user.id = :id', { id: mentorId })
@@ -62,7 +62,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
 		return mentorAvailability
 	}
 
-	async findByMentorIdAndDay({ mentorId, availableDay }): Promise<IMentorAvailability[]> {
+	async getAvailabilityByMentorIdAndDate({ mentorId, availableDay }): Promise<IMentorAvailability[]> {
 		const availabilitiesFound = await this.ormRepository
 			.createQueryBuilder('mentor_availability')
 			.leftJoinAndSelect('mentor_availability.mentor', 'user')
@@ -84,7 +84,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
 		return availabilities
 	}
 
-	async findAvailableMentoringBySkill(skill: string): Promise<IMentorAvailability[]> {
+	async getAvailableMentorsBySkill(skill: string): Promise<IMentorAvailability[]> {
 		const availableMentoringFound = await this.ormRepository
 			.createQueryBuilder("mentor_availability")
 			.leftJoinAndSelect('mentor_availability.mentor', 'user')
