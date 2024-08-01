@@ -95,4 +95,14 @@ export class UserRepository implements IUserRepository {
     
     return skills 
   }
+
+  async findMentorsBySkill(skill: string): Promise<IUser[] | []> {
+    const mentors = await this.ormRepository.createQueryBuilder("user")
+    .leftJoinAndSelect("user.skills", "skill")
+    .where("skill.name = :skill", { skill })
+    .andWhere("user.role = :role", { role: "mentor" })
+    .getMany()
+
+    return mentors
+  }
 }

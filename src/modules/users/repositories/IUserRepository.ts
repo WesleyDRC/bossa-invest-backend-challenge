@@ -8,4 +8,5 @@ export interface IUserRepository {
 	findById(id: string): Promise<IUser | null>
 	addSkillUser({ userId, skill }: { userId: string; skill: ISkill }): Promise<IUser>
 	getUserSkills(userId: string): Promise<ISkill[] | []>
+	findMentorsBySkill(skill: string): Promise<IUser[] | []>
 }
