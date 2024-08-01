@@ -9,7 +9,6 @@ import { User } from "../../entities/User";
 import { AppDataSource } from "../../../../shared/typeorm";
 
 export class UserRepository implements IUserRepository {
-
   private ormRepository: Repository<User>;
 
   constructor() {
@@ -21,7 +20,7 @@ export class UserRepository implements IUserRepository {
       name,
       email,
       password,
-      role
+      role,
     });
 
     await this.ormRepository.save(user);
@@ -33,14 +32,16 @@ export class UserRepository implements IUserRepository {
       password: user.password,
       role: user.role,
       created_at: user.created_at,
-      updated_at: user.updated_at
+      updated_at: user.updated_at,
     };
   }
 
   async findByEmail(email: string): Promise<IUser | null> {
-    const user = await this.ormRepository.findOneBy({ email })
+    const user = await this.ormRepository.findOneBy({
+      email,
+    });
 
-    if (!user) return null
+    if (!user) return null;
 
     return {
       id: user.id,
@@ -49,17 +50,20 @@ export class UserRepository implements IUserRepository {
       password: user.password,
       role: user.role,
       created_at: user.created_at,
-      updated_at: user.updated_at
+      updated_at: user.updated_at,
     };
   }
 
   async findById(id: string): Promise<IUser | null> {
-    const user = await this.ormRepository.createQueryBuilder('user')
-      .leftJoinAndSelect('user.skills', 'skill')
-      .where('user.id = :id', { id: id })
+    const user = await this.ormRepository
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.skills", "skill")
+      .where("user.id = :id", {
+        id: id,
+      })
       .getOne();
 
-    if (!user) return null
+    if (!user) return null;
 
     return {
       id: user.id,
@@ -69,19 +73,22 @@ export class UserRepository implements IUserRepository {
       role: user.role,
       skills: user.skills,
       created_at: user.created_at,
-      updated_at: user.updated_at
-    }
+      updated_at: user.updated_at,
+    };
   }
 
   async addSkillUser({ userId, skill }) {
-    const user = await this.ormRepository.createQueryBuilder("user")
+    const user = await this.ormRepository
+      .createQueryBuilder("user")
       .leftJoinAndSelect("user.skills", "skill")
-      .where("user.id = :id", { id: userId })
+      .where("user.id = :id", {
+        id: userId,
+      })
       .getOne();
 
     user.skills.push(skill);
 
-    await this.ormRepository.save(user)
+    await this.ormRepository.save(user);
 
     return {
       id: user.id,
@@ -91,28 +98,36 @@ export class UserRepository implements IUserRepository {
       role: user.role,
       skills: user.skills,
       created_at: user.created_at,
-      updated_at: user.updated_at
-    }
+      updated_at: user.updated_at,
+    };
   }
 
   async getUserSkills(userId: string): Promise<ISkill[] | []> {
-    const user = await this.ormRepository.createQueryBuilder("user")
+    const user = await this.ormRepository
+      .createQueryBuilder("user")
       .leftJoinAndSelect("user.skills", "skill")
-      .where("user.id = :id", { id: userId })
-      .getOne()
+      .where("user.id = :id", {
+        id: userId,
+      })
+      .getOne();
 
-    const skills = user.skills
+    const skills = user.skills;
 
-    return skills
+    return skills;
   }
 
   async findMentorsBySkill(skill: string): Promise<IUser[] | []> {
-    const mentors = await this.ormRepository.createQueryBuilder("user")
+    const mentors = await this.ormRepository
+      .createQueryBuilder("user")
       .leftJoinAndSelect("user.skills", "skill")
-      .where("skill.name = :skill", { skill })
-      .andWhere("user.role = :role", { role: "mentor" })
-      .getMany()
+      .where("skill.name = :skill", {
+        skill,
+      })
+      .andWhere("user.role = :role", {
+        role: "mentor",
+      })
+      .getMany();
 
-    return mentors
+    return mentors;
   }
 }

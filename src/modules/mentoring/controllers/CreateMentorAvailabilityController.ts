@@ -20,13 +20,13 @@ export class CreateMentorAvailabilityController {
 
 		const formattedDate = `${year}-${month}-${day}`
 
-		const mentoringSession = await createMentorAvailabilityService.execute({
+		const mentoringAvailable = await createMentorAvailabilityService.execute({
 			mentorId,
 			hourStart,
 			hourEnd,
 			availableDay: formattedDate
 		})
 
-		return response.json({mentoringSession})
+		return response.json({mentoringAvailable})
 	}
 }

@@ -10,8 +10,8 @@ export class GetUserSkillsController {
 
 		const getUserSkillsService = container.resolve(GetUserSkillsService)
 
-		const skills = await getUserSkillsService.execute({userId})
+		const skills = await getUserSkillsService.execute({ userId })
 
-		return response.json({skills})
+		return response.json({ skills })
 	}
 }
