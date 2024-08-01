@@ -9,6 +9,7 @@ import { MentorAvailability } from "../../modules/mentoring/entities/MentorAvail
 import { MentoringAssessment } from "../../modules/mentoring/entities/MentoringAssessment"
 
 const createDatabaseIfNotExists = async () => {
+
     const connection = await createConnection({
         host: process.env.DB_HOST,
         user: process.env.DB_USER,
