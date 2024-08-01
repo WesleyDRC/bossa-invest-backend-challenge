@@ -31,4 +31,10 @@ export class SkillRepository implements ISkillRepository {
 
 		return Promise.resolve(skill)
 	}
+
+	async findAll(): Promise<ISkill[] | []> {
+		const skills = await this.ormRepository.find()
+
+		return Promise.resolve(skills)
+	}
 }

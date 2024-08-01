@@ -14,7 +14,7 @@ routes.get("/health-check", (request, response) => {
 
 routes.use("/users", userRoutes)
 routes.use("/auth", authRoutes)
-routes.use("/skill", skillRoutes)
+routes.use("/skills", skillRoutes)
 routes.use("/mentoring", mentoringRoutes)
 routes.use("/calendar", googleCalendarRoutes)
 
