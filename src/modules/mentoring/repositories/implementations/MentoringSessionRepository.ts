@@ -24,7 +24,6 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
 		hourEnd,
 		scheduledAt
 	}: IStoreMentoringSessionDto): Promise<IMentoringSession> {
-
 		const mentoringSession = this.ormRepository.create({
 			mentor,
 			mentee,

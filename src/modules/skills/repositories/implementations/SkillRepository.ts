@@ -27,7 +27,10 @@ export class SkillRepository implements ISkillRepository {
 	}
 
 	async findByName(name: string): Promise<ISkill | null>{
-		const skill = await this.ormRepository.findOneBy({name: name})
+		const skill = await this.ormRepository
+			.createQueryBuilder("skill")
+			.where("LOWER(skill.name) = LOWER(:name)", { name })
+			.getOne();
 
 		return Promise.resolve(skill)
 	}

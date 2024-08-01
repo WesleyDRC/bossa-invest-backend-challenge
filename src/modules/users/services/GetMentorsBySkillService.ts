@@ -13,6 +13,10 @@ export class GetMentorsBySkillService {
 	async execute({ skill }): Promise<IUser[] | []> {
 		const mentors = await this.userRepository.findMentorsBySkill(skill)
 
+		mentors.forEach((mentor: IUser) => {
+			delete mentor.password;
+		});
+
 		return mentors
 	}
 }

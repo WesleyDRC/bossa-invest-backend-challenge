@@ -47,6 +47,8 @@ export class CreateUserService {
 			role
 		})
 
+		delete userCreated.password;
+
 		return userCreated
 	}
 }

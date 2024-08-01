@@ -109,7 +109,7 @@ export class CreateMentoringSessionService {
 		const mentoringSession = await this.mentoringSessionRepository.create({
 			mentor: foundMentor,
 			mentee: foundMentee,
-			skills: skillsFound,
+			skills: foundMentorSkills,
 			hourStart: convertHourStringToMinutes(hourStart),
 			hourEnd: convertHourStringToMinutes(hourEnd),
 			scheduledAt: scheduledAt

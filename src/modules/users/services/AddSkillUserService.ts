@@ -45,6 +45,8 @@ export class AddSkillUserService {
 
 		const user = await this.userRepository.addSkillUser({ userId, skill })
 
+		delete user.password
+
 		return user
 	}
 }
