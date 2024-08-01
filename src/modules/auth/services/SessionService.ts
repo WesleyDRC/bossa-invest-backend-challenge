@@ -28,7 +28,7 @@ export class SessionService {
 
 		const foundUser = await this.userRepository.findByEmail(email)
 
-		if (foundUser.length === 0) {
+		if (!foundUser) {
 			throw new AppError(userConstants.NOT_FOUND, 404)
 		}
 

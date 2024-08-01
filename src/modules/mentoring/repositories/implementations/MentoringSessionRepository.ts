@@ -47,7 +47,7 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
 		}
 	}
 
-	async findMentoringSessionByHour({ mentorId, startAt, endAt }) {
+	async findMentoringSessionByHour({ mentorId, startAt, endAt }): Promise<IMentoringSession> {
 
 		const mentoringSession = await this.ormRepository
 			.createQueryBuilder('mentoring_session')
@@ -56,7 +56,16 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
 			.andWhere(':startAt <= mentoring_session.hourEnd AND :endAt >= mentoring_session.hourStart', { startAt, endAt })
 			.getOne();
 
-		return mentoringSession
+		return {
+			id: mentoringSession.id,
+			mentorId: mentoringSession.mentor.id,
+			menteeId: mentoringSession.mentee.id,
+			hourStart: mentoringSession.hourStart,
+			hourEnd: mentoringSession.hourEnd,
+			skills: mentoringSession.skills,
+			status: mentoringSession.status,
+			scheduledAt: mentoringSession.scheduledAt
+		}
 	}
 
 	async findById(id: string): Promise<IMentoringSession> {

@@ -37,10 +37,20 @@ export class UserRepository implements IUserRepository {
     };
   }
 
-  async findByEmail(email: string): Promise<IUser[] | []> {
-    const user = await this.ormRepository.findBy({ email })
+  async findByEmail(email: string): Promise<IUser | null> {
+    const user = await this.ormRepository.findOneBy({ email })
 
-    return Promise.resolve(user)
+    if (!user) return null
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+      created_at: user.created_at,
+      updated_at: user.updated_at
+    };
   }
 
   async findById(id: string): Promise<IUser | null> {
@@ -88,20 +98,20 @@ export class UserRepository implements IUserRepository {
   async getUserSkills(userId: string): Promise<ISkill[] | []> {
     const user = await this.ormRepository.createQueryBuilder("user")
       .leftJoinAndSelect("user.skills", "skill")
-      .where("user.id = :id", {id: userId})
+      .where("user.id = :id", { id: userId })
       .getOne()
 
     const skills = user.skills
-    
-    return skills 
+
+    return skills
   }
 
   async findMentorsBySkill(skill: string): Promise<IUser[] | []> {
     const mentors = await this.ormRepository.createQueryBuilder("user")
-    .leftJoinAndSelect("user.skills", "skill")
-    .where("skill.name = :skill", { skill })
-    .andWhere("user.role = :role", { role: "mentor" })
-    .getMany()
+      .leftJoinAndSelect("user.skills", "skill")
+      .where("skill.name = :skill", { skill })
+      .andWhere("user.role = :role", { role: "mentor" })
+      .getMany()
 
     return mentors
   }

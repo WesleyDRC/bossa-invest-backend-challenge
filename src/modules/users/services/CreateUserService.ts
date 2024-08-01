@@ -30,7 +30,7 @@ export class CreateUserService {
 
 		const foundUser = await this.userRepository.findByEmail(email)
 
-		if (foundUser.length > 0) {
+		if (!foundUser) {
 			throw new AppError(userConstants.ALREADY_REGISTERED, 409)
 		}
 
