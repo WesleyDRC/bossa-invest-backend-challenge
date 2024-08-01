@@ -4,6 +4,7 @@ WORKDIR /app
 EXPOSE 5000
 
 COPY package*.json ./
+RUN npm install
 RUN npm install --only=production
 RUN npm install --save-dev ts-node-dev
 

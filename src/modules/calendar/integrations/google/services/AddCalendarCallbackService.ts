@@ -1,16 +1,12 @@
 import { inject, injectable } from "tsyringe"
 import { google } from "googleapis";
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone"
-import utc from "dayjs/plugin/utc"
-dayjs.extend(utc)
-dayjs.extend(timezone)
 
 import { IMentoringSessionRepository } from "../../../../mentoring/repositories/IMentoringSessionRepository";
 import { IUserRepository } from "../../../../users/repositories/IUserRepository";
 
 import { AppError } from "../../../../../shared/errors/AppError";
 import { convertMinutesToHourString } from "../../../../../shared/utils/convert-minutes-to-hour-string";
+import { formatDateTime } from "../../../../../shared/utils/format-date-time";
 
 import { mentoringConstants } from "../../../../mentoring/contants/mentoringContants";
 import { userConstants } from "../../../../users/constants/userConstants";
@@ -59,7 +55,7 @@ export class AddCalendarCallbackService {
 		const hourStart = convertMinutesToHourString(mentoringSession.hourStart)
 		const hourEnd = convertMinutesToHourString(mentoringSession.hourEnd)
 
-		let { startDateTime, endDateTime } = this.formatDateTime(
+		const { startDateTime, endDateTime } = formatDateTime(
 			mentoringSession.scheduledAt,
 			hourStart,
 			hourEnd
@@ -72,26 +68,16 @@ export class AddCalendarCallbackService {
 				summary: 'Mentoria',
 				description: `Sessão de mentoria com ${mentor.name}`,
 				start: {
-					'dateTime': startDateTime,
-					'timeZone': 'Brazil/East',
+					dateTime: startDateTime,
+					timeZone: 'America/Sao_Paulo',
 				},
 				end: {
 					dateTime: endDateTime,
-					timeZone: 'Brazil/East',
+					timeZone: 'America/Sao_Paulo',
 				}
 			}
 		})
 
 		return eventCreated
 	}
-
-	private formatDateTime = (scheduledAt, hourStart, hourEnd) => {
-		const startDate = dayjs.tz(`${scheduledAt}T${hourStart}:00`);
-		const endDate = dayjs.tz(`${scheduledAt}T${hourEnd}:00`);
-
-		return {
-			startDateTime: startDate.format(),
-			endDateTime: endDate.format()
-		};
-	};
 }
