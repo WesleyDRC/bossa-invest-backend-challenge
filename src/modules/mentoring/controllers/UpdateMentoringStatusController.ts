@@ -13,12 +13,12 @@ export class UpdateMentoringStatusController {
 
     const updateMentoringStatusService = container.resolve(UpdateMentoringStatusService);
 
-    const mentoringSessions = await updateMentoringStatusService.execute({
+    const mentoringSession = await updateMentoringStatusService.execute({
       sessionId,
 			mentorId,
 			status
     });
 
-    return response.json({ mentoringSessions });
+    return response.json({ mentoringSession });
   }
 }

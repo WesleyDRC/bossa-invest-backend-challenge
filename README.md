@@ -418,7 +418,77 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 		]
 	}
 	```
+5. Pegar mentorias que o usuário participou.
 
+	**Descrição:** Retorna todas as mentorias que o usuário participou.
+
+	```
+	Endpoint: GET /mentoring/user
+
+	Headers:
+	Authorization: Bearer <token>
+
+	Output:
+	{
+		"mentoringSessions": [
+			{
+				"id": "string",
+				"mentorId": "string",
+				"menteeId": "string",
+				"hourStart": number,
+				"hourEnd": number,
+				"skills": [
+					{
+						"id": "string"",
+						"name": "string"
+					}
+				],
+				"status": "string",
+				"scheduledAt": "string"
+			}
+		]
+	}
+	```
+6. Atualizar status da mentoria.
+
+	**Descrição:** Atualiza o status da mentoria para um dos valores permitidos: `scheduled`, `completed`, ou `canceled`.
+
+	**Observação:** Somente mentores podem atualizar o status da mentoria.
+
+	```
+	Endpoint: GET /mentoring/:sessionId
+
+	Params:
+	sessionId <string> - ID da sessão de mentoria que deseja atualizar.
+
+	Headers:
+	Authorization: Bearer <token>
+
+	Input:
+	Body Type: JSON
+	{
+		"status": "string"
+	}
+
+	Output:
+	{
+		"mentoringSession": {
+			"id": "string",
+			"mentorId": "string",
+			"menteeId": "string",
+			"hourStart": number,
+			"hourEnd": number,
+			"skills": [
+				{
+					"id": "string",
+					"name": "string"
+				}
+			],
+			"status": "string",
+			"scheduledAt": "string"
+		}
+	}
+	```
 * Calendar
 	1. Adicionar ao Google Calendar
 
