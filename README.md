@@ -490,7 +490,7 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	}
 	```
 * Calendar
-	1. Adicionar ao Google Calendar
+1. Adicionar ao Google Calendar
 
 		**Descrição:**  Adiciona uma sessão de mentoria à agenda do usuário no Google Calendar. O processo envolve duas etapas: autenticação e adição do evento.
 
