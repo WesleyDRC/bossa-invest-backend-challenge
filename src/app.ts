@@ -5,11 +5,10 @@ import "./shared/container/index"
 
 import cors from "cors"
 import express, { Express, Request, Response, NextFunction } from "express";
-import { errors, isCelebrateError } from "celebrate"
-
-import { AppError } from "./shared/errors/AppError"
-
 import routes from "./shared/routes";
+
+import { errors, isCelebrateError } from "celebrate"
+import { AppError } from "./shared/errors/AppError"
 
 const app: Express = express();
 
@@ -19,7 +18,11 @@ app.use(express.json());
 
 app.use(routes)
 
-app.use(errors)
+app.use(errors())
+
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Route not found" });
+});
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {

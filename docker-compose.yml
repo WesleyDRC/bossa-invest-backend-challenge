@@ -1,21 +1,6 @@
-services:
-  app:
-    build: 
-      context: .
-      dockerfile: app.dockerfile
-    container_name: mentoring-platform-app
-    volumes:
-      - .:/app
-    ports:
-      - ${PORT}:${PORT}
-    depends_on:
-      - mysql-database
-    environment:
-      - MYSQL_HOST=mysql-database
-    networks:
-      - mentoring-platform-network
-    command: ["npm", "start"]  
+version: "3"
 
+services:
   mysql-database:
     image: mysql:5.7
     container_name: mentoring-platform-mysql-database

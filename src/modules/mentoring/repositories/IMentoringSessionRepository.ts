@@ -3,6 +3,6 @@ import { IStoreMentoringSessionDto } from "../dtos/IStoreMentoringSessionDto";
 
 export interface IMentoringSessionRepository {
 	create(mentoringSession: IStoreMentoringSessionDto): Promise<IMentoringSession>
-	findMentoringSessionByHour({ mentorId, startAt, endAt }): Promise<IMentoringSession> 
+	findMentoringSessionByHour({ mentorId, startAt, endAt }): Promise<IMentoringSession | null>  
 	findById(id: string): Promise<IMentoringSession>
 }

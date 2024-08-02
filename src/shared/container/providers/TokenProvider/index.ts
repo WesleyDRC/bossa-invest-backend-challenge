@@ -1,6 +1,6 @@
-import { container } from 'tsyringe';
+import { container } from "tsyringe";
 
-import { JwtProvider } from './implementations/JwtProvider';
-import { ITokenProvider } from './models/ITokenProvider';
+import { JwtProvider } from "./implementations/JwtProvider";
+import { ITokenProvider } from "./models/ITokenProvider";
 
-container.registerSingleton<ITokenProvider>('TokenProvider', JwtProvider);
+container.registerSingleton<ITokenProvider>("TokenProvider", JwtProvider);

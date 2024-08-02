@@ -1,2 +1,2 @@
-import "./HashProvider"
-import "./TokenProvider"
+import "./HashProvider";
+import "./TokenProvider";

@@ -1,4 +1,4 @@
-import { inject, injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe";
 
 import { IMentoringSessionRepository } from "../repositories/IMentoringSessionRepository";
 import { IUserRepository } from "../../users/repositories/IUserRepository";
@@ -15,106 +15,115 @@ import { mentoringConstants } from "../contants/mentoringContants";
 
 @injectable()
 export class CreateMentoringSessionService {
+  constructor(
+    @inject("MentoringSessionRepository")
+    private mentoringSessionRepository: IMentoringSessionRepository,
 
-	constructor(
-		@inject("MentoringSessionRepository")
-		private mentoringSessionRepository: IMentoringSessionRepository,
+    @inject("MentorAvailabilityRepository")
+    private mentorAvailabilityRepository: IMentorAvailabilityRepository,
 
-		@inject("MentorAvailabilityRepository")
-		private mentorAvailabilityRepository: IMentorAvailabilityRepository,
+    @inject("UserRepository")
+    private userRepository: IUserRepository,
 
-		@inject("UserRepository")
-		private userRepository: IUserRepository,
+    @inject("SkillRepository")
+    private skillRepository: ISkillRepository
+  ) {}
 
-		@inject("SkillRepository")
-		private skillRepository: ISkillRepository
-	) { }
+  async execute({
+    mentorId,
+    menteeId,
+    skills,
+    hourStart,
+    hourEnd,
+    scheduledAt,
+  }) {
+    const foundMentor = await this.userRepository.findById(mentorId);
 
-	async execute({
-		mentorId,
-		menteeId,
-		skills,
-		hourStart,
-		hourEnd,
-		scheduledAt
-	}) {
+    if (!foundMentor) {
+      throw new AppError(userConstants.NOT_FOUND, 404);
+    }
 
-		const foundMentor = await this.userRepository.findById(mentorId)
+    const foundMentee = await this.userRepository.findById(menteeId);
 
-		if (!foundMentor) {
-			throw new AppError(userConstants.NOT_FOUND, 404)
-		}
+    if (!foundMentee) {
+      throw new AppError(userConstants.NOT_FOUND, 404);
+    }
 
-		const foundMentee = await this.userRepository.findById(menteeId)
+    const mentorSkills = await this.userRepository.getUserSkills(mentorId);
 
-		if (!foundMentee) {
-			throw new AppError(userConstants.NOT_FOUND, 404)
-		}
+    const skillsFound = skills.filter((skill: string) =>
+      mentorSkills.some((mentorSkill: ISkill) => mentorSkill.name === skill)
+    );
 
-		const mentorSkills = await this.userRepository.getUserSkills(mentorId)
-		
-		const skillsFound = skills.filter((skill: string) => 
-			mentorSkills.some((mentorSkill: ISkill) => mentorSkill.name === skill)
-		);
-		
-		if (skillsFound.length === 0) {
-			throw new AppError(userConstants.MENTOR_SKILL_NOT_FOUND, 404);
-		}
-		
-		const foundMentorSkills = mentorSkills.filter((mentorSkill: ISkill) => 
-			skills.includes(mentorSkill.name)
-		);
-		
-		if (foundMentorSkills.length === 0) {
-			throw new AppError(userConstants.MENTOR_SKILL_NOT_FOUND, 404);
-		}
+    if (skillsFound.length === 0) {
+      throw new AppError(userConstants.MENTOR_SKILL_NOT_FOUND, 404);
+    }
 
-		const mentorAvailability = await this.mentorAvailabilityRepository.getAvailabilityByMentorId(mentorId)
+    const foundMentorSkills = mentorSkills.filter((mentorSkill: ISkill) =>
+      skills.includes(mentorSkill.name)
+    );
 
-		const isAvailableDay = mentorAvailability.find((avaiability: IMentorAvailability) => {
-			return avaiability.availableDay === scheduledAt
-		})
+    if (foundMentorSkills.length === 0) {
+      throw new AppError(userConstants.MENTOR_SKILL_NOT_FOUND, 404);
+    }
 
-		if (!isAvailableDay) {
-			throw new AppError(mentoringConstants.UNAVAILABLE_MENTORING, 404)
-		}
+    const mentorAvailability =
+      await this.mentorAvailabilityRepository.getAvailabilityByMentorId(
+        mentorId
+      );
 
-		const startAt = convertHourStringToMinutes(hourStart)
-		const endAt = convertHourStringToMinutes(hourEnd)
+    const isAvailableDay = mentorAvailability.find(
+      (avaiability: IMentorAvailability) => {
+        return avaiability.availableDay === scheduledAt;
+      }
+    );
 
-		const hourStartMentoringAvailable = convertHourStringToMinutes(isAvailableDay.hourStart)
-		const hourEndMentoringAvailable = convertHourStringToMinutes(isAvailableDay.hourEnd)
+    if (!isAvailableDay) {
+      throw new AppError(mentoringConstants.UNAVAILABLE_MENTORING, 404);
+    }
 
-		if (endAt <= startAt) {
-			throw new AppError(mentoringConstants.HOURS_ERROR, 403)
-		}
+    const startAt = convertHourStringToMinutes(hourStart);
+    const endAt = convertHourStringToMinutes(hourEnd);
 
-		if (
-			(startAt >= hourStartMentoringAvailable && startAt >= hourEndMentoringAvailable) ||
-			(endAt > hourEndMentoringAvailable)
-		) {
-			throw new AppError(mentoringConstants.FAILED_SCHEDULE, 400)
-		}
+    const hourStartMentoringAvailable = convertHourStringToMinutes(
+      isAvailableDay.hourStart
+    );
+    const hourEndMentoringAvailable = convertHourStringToMinutes(
+      isAvailableDay.hourEnd
+    );
 
-		const overlappingSession = await this.mentoringSessionRepository.findMentoringSessionByHour({
-			mentorId,
-			startAt,
-			endAt
-		})
+    if (endAt <= startAt) {
+      throw new AppError(mentoringConstants.HOURS_ERROR, 403);
+    }
 
-		if (overlappingSession) {
-			throw new AppError(mentoringConstants.TIME_IS_ALREADY_BOOKED, 400)
-		}
+    if (
+      (startAt >= hourStartMentoringAvailable &&
+        startAt >= hourEndMentoringAvailable) ||
+      endAt > hourEndMentoringAvailable
+    ) {
+      throw new AppError(mentoringConstants.FAILED_SCHEDULE, 400);
+    }
 
-		const mentoringSession = await this.mentoringSessionRepository.create({
-			mentor: foundMentor,
-			mentee: foundMentee,
-			skills: foundMentorSkills,
-			hourStart: convertHourStringToMinutes(hourStart),
-			hourEnd: convertHourStringToMinutes(hourEnd),
-			scheduledAt: scheduledAt
-		})
+    const overlappingSession =
+      await this.mentoringSessionRepository.findMentoringSessionByHour({
+        mentorId,
+        startAt,
+        endAt,
+      });
 
-		return mentoringSession
-	}
+    if (overlappingSession) {
+      throw new AppError(mentoringConstants.TIME_IS_ALREADY_BOOKED, 400);
+    }
+
+    const mentoringSession = await this.mentoringSessionRepository.create({
+      mentor: foundMentor,
+      mentee: foundMentee,
+      skills: foundMentorSkills,
+      hourStart: convertHourStringToMinutes(hourStart),
+      hourEnd: convertHourStringToMinutes(hourEnd),
+      scheduledAt: scheduledAt,
+    });
+
+    return mentoringSession;
+  }
 }
