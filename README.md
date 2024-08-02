@@ -35,6 +35,36 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 	npm start
 	```
+
+### Decisões
+
+* **Por que Express?**
+
+	Express é um framework da web do Node.js bem flexível, que me permite adicionar funcionalidades conforme necessário.
+
+* **Por que TypeScript?**
+
+	TypeScript adiciona tipagem estática ao JavaScript, ajudando a	 identificar erros em tempo de compilação e ele se integra bem com o framework Express. Além de que eu já possuo familiaridade com a linguagem, facilitando o desenvolvimento do projeto.
+
+* **Por que MySQL?**
+
+	Escolhi MySQL como meu banco de dados, por ser um banco de dados amplamente utilizado e possuir uma boa interface gráfica para gerenciamento( MySQL Workbench). Minhas experiências anteriores com MySQL em outros projetos também contribuiu para uma configuração mais tranquila.
+
+
+* **Por que TypeORM?**
+
+	Usei TypeORM porque eu já tinha conhecimento sobre o ORM, e ele se intregra bem com TypeScript. Além de que ele facilita bem o trabalho com consultas ao banco de dados.
+
+* **Por que Tsyringe?**
+
+	Tsyringe é uma ferramenta para injeção de dependências. Ele ajuda muito bem a organizar e gerenciar as dependências de forma clara. 
+
+
+* **Por que JOI?**
+
+	Usei JOI para validar dados de entrada, garantindo que os dados estejam no formato esperado antes de passar para os controllers.
+
+
 ### Estrutura do projeto
 
 Optei por usar uma arquitetura monolítica modular, pois assim consigo separar minha aplicação em diferentes módulos, garantindo uma organização clara e modular, tornando mais fácil de entender e navegar pelo código.
