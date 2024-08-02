@@ -8,7 +8,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 
 1. Autenticar usuário
 
-	**Description**: Autentica um usuário e retorna um token JWT.
+	**Descrição**: Autentica um usuário e retorna um token JWT.
 
 	```
 	Endpoint: POST /auth
@@ -29,7 +29,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 * **Users**
 1. Criar usuário
 
-	**Description**: Registra um usuário e retorna os dados do usuário criado.
+	**Descrição**: Registra um usuário e retorna os dados do usuário criado.
 
 	```
 	Endpoint: POST /users
@@ -51,7 +51,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 2. Adicionar skill ao mentor.
 
-	**Description:** Registra uma skill para um mentor.
+	**Descrição:** Registra uma skill para um mentor.
 
 	**Observação:** Somente mentores podem possuir skills.
 
@@ -87,7 +87,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 3. Pegar skills de um mentor
 
-	**Description:** Retorna as habilidades de um mentor.
+	**Descrição:** Retorna as habilidades de um mentor.
 
 	**Observação:** Apenas mentores podem consultar suas próprias habilidades.
 
@@ -110,7 +110,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 
 4. Procurar mentores pela habilidade
 
-	**Description:** Retorna os mentores que possuem conhecimento sobre uma habilidade.
+	**Descrição:** Retorna os mentores que possuem conhecimento sobre uma habilidade.
 
 	```
 	Endpoint: GET /users/skills/mentors?skill=NOME_DA_HABILIDADE
@@ -143,7 +143,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 
 1. Criar uma habilidade
 
-	**Description:** Cria uma habilidade.
+	**Descrição:** Cria uma habilidade.
 
 	```
 	Endpoint: POST /skills/
@@ -164,7 +164,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 2. Pegar habilidades
 
-	**Description:** Retorna todas habilidades criadas no banco de dados.
+	**Descrição:** Retorna todas habilidades criadas no banco de dados.
 
 	```
 	Endpoint: GET /skills/
@@ -185,7 +185,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 
 1. Criar disponibilidade do mentor
 
-	**Description:** Criar horário que o mentor está disponível para dar mentoria.
+	**Descrição:** Criar horário que o mentor está disponível para dar mentoria.
 	
 	**Observação:** Somente mentores podem criar o horário que eles estão disponíveis para dar mentoria.
 
@@ -218,7 +218,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 
 2. Criar uma sessão de mentoria
 
-	**Description:** Cria uma sessão de mentoria.
+	**Descrição:** Cria uma sessão de mentoria.
 
 	**Observação:** Somente mentorados podem criar uma sessão de mentoria. 
 
@@ -261,7 +261,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 3. Criar avaliação da mentoria
 
-	**Description:** Criar avaliação de uma mentoria.
+	**Descrição:** Criar avaliação de uma mentoria.
 
 	**Observação:** Somente mentorados podem criar avaliações. 
 
@@ -292,7 +292,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 4. Pegar mentorias disponíveis pela habilidade
 
-	**Description:** Retorna todas as mentorias disponíveis por habilidade.
+	**Descrição:** Retorna todas as mentorias disponíveis por habilidade.
 
 	```
 	Endpoint: GET /mentoring/available?skill=NOME_DA_HABILIDADE
@@ -318,9 +318,9 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 * Calendar
 	1. Adicionar ao Google Calendar
 
-		**Description:**  Adiciona uma sessão de mentoria à agenda do usuário no Google Calendar. O processo envolve duas etapas: autenticação e adição do evento.
+		**Descrição:**  Adiciona uma sessão de mentoria à agenda do usuário no Google Calendar. O processo envolve duas etapas: autenticação e adição do evento.
 
-		1°Etapa Autenticação
+		1°Etapa - Autenticação
 
 		```
 		Endpoint: GET /calendar/add-to-google-calendar
