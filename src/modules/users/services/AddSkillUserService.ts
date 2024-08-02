@@ -1,4 +1,4 @@
-import { inject, injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe";
 
 import { IAddSkillUserDto } from "../dtos/IAddSkillUserDto";
 import { ISkillRepository } from "../../skills/repositories/ISkillRepository";
@@ -12,41 +12,39 @@ import { Skill } from "../../skills/entities/Skill";
 
 @injectable()
 export class AddSkillUserService {
-	constructor(
-		@inject("UserRepository")
-		private userRepository: IUserRepository,
+  constructor(
+    @inject("UserRepository")
+    private userRepository: IUserRepository,
 
-		@inject("SkillRepository")
-		private skillRepository: ISkillRepository
-	) { }
+    @inject("SkillRepository")
+    private skillRepository: ISkillRepository
+  ) {}
 
-	async execute({
-		userId,
-		skillName
-	}: IAddSkillUserDto): Promise<IUser> {
+  async execute({ userId, skillName }: IAddSkillUserDto): Promise<IUser> {
+    const foundUser = await this.userRepository.findById(userId);
 
-		const foundUser = await this.userRepository.findById(userId)
+    if (!foundUser) {
+      throw new AppError(userConstants.NOT_FOUND, 401);
+    }
 
-		if (!foundUser) {
-			throw new AppError(userConstants.NOT_FOUND, 401)
-		}
+    const skill = await this.skillRepository.findByName(skillName);
 
-		const skill = await this.skillRepository.findByName(skillName)
+    if (!skill) {
+      throw new AppError(skillsConstants.NOT_FOUND, 401);
+    }
 
-		if (!skill) {
-			throw new AppError(skillsConstants.NOT_FOUND, 401)
-		}
+    const skillExists = foundUser.skills.some(
+      (existingSkill: Skill) => existingSkill.id === skill.id
+    );
 
-		const skillExists = foundUser.skills.some((existingSkill: Skill) => existingSkill.id === skill.id);
+    if (skillExists) {
+      throw new AppError(userConstants.ALREADY_SKILL, 409);
+    }
 
-		if (skillExists) {
-			throw new AppError(userConstants.ALREADY_SKILL, 409)
-		}
+    const user = await this.userRepository.addSkillUser({ userId, skill });
 
-		const user = await this.userRepository.addSkillUser({ userId, skill })
+    delete user.password;
 
-		delete user.password
-
-		return user
-	}
+    return user;
+  }
 }

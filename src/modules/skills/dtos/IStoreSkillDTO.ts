@@ -1,3 +1,3 @@
 export interface IStoreSkillDto {
-	name: string
+  name: string;
 }

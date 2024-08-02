@@ -8,20 +8,20 @@ import { skillsConstants } from "../constants/skillsConstants";
 
 @injectable()
 export class CreateSkillService {
-	constructor(
-		@inject("SkillRepository")
-		private skillRepository: ISkillRepository
-	){}
+  constructor(
+    @inject("SkillRepository")
+    private skillRepository: ISkillRepository
+  ) {}
 
-	async execute({name}: IStoreSkillDto): Promise<ISkill> {
-		const foundSkill = await this.skillRepository.findByName(name)
+  async execute({ name }: IStoreSkillDto): Promise<ISkill> {
+    const foundSkill = await this.skillRepository.findByName(name);
 
-		if(foundSkill) {
-			throw new AppError(skillsConstants.ALREADY_REGISTERED, 409)
-		}
+    if (foundSkill) {
+      throw new AppError(skillsConstants.ALREADY_REGISTERED, 409);
+    }
 
-		const skill = await this.skillRepository.create({name})
+    const skill = await this.skillRepository.create({ name });
 
-		return skill
-	}
+    return skill;
+  }
 }

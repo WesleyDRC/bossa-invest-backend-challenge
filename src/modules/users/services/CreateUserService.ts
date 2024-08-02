@@ -19,13 +19,7 @@ export class CreateUserService {
     private hashProvider: IHashProvider
   ) {}
 
-  async execute({
-    name,
-    email,
-    password,
-    confirmPassword,
-    role,
-  }: IStoreUserDto): Promise<IUser> {
+  async execute({ name, email, password, confirmPassword, role }: IStoreUserDto): Promise<IUser> {
     const foundUser = await this.userRepository.findByEmail(email);
 
     if (foundUser) {
@@ -34,9 +28,7 @@ export class CreateUserService {
 
     const user = User.create(email, password, confirmPassword);
 
-    const encryptedPassword = await this.hashProvider.generateHash(
-      user.password
-    );
+    const encryptedPassword = await this.hashProvider.generateHash(user.password);
 
     const userCreated = await this.userRepository.create({
       name,

@@ -4,14 +4,13 @@ import { container } from "tsyringe";
 import { CreateSkillService } from "../services/CreateSkillService";
 
 export class CreateSkillController {
-	public async handle(request: Request, response: Response): Promise<Response> {
+  public async handle(request: Request, response: Response): Promise<Response> {
+    const { name } = request.body;
 
-		const { name } = request.body
+    const createSkillService = container.resolve(CreateSkillService);
 
-		const createSkillService = container.resolve(CreateSkillService)
+    const skill = await createSkillService.execute({ name });
 
-		const skill = await createSkillService.execute({name})
-
-		return response.json({skill})
-	}
+    return response.json({ skill });
+  }
 }

@@ -5,14 +5,14 @@ import { ISkill } from "../../skills/domain/ISkill";
 
 @injectable()
 export class GetUserSkillsService {
-	constructor(
-		@inject("UserRepository")
-		private userRepository: IUserRepository
-	) { }
+  constructor(
+    @inject("UserRepository")
+    private userRepository: IUserRepository
+  ) {}
 
-	async execute({ userId }): Promise<ISkill[] | []> {
-		const skills = await this.userRepository.getUserSkills(userId)
+  async execute({ userId }): Promise<ISkill[] | []> {
+    const skills = await this.userRepository.getUserSkills(userId);
 
-		return skills
-	}
+    return skills;
+  }
 }

@@ -5,14 +5,14 @@ import { ISkillRepository } from "../repositories/ISkillRepository";
 
 @injectable()
 export class GetSkillsService {
-	constructor(
-		@inject("SkillRepository")
-		private skillRepository: ISkillRepository
-	){}
+  constructor(
+    @inject("SkillRepository")
+    private skillRepository: ISkillRepository
+  ) {}
 
-	async execute(): Promise<ISkill[] | []> {
-		const skills = await this.skillRepository.findAll()
+  async execute(): Promise<ISkill[] | []> {
+    const skills = await this.skillRepository.findAll();
 
-		return skills
-	}
+    return skills;
+  }
 }

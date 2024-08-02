@@ -8,13 +8,7 @@ import { AddCalendarCallbackController } from "../controllers/AddCalendarCallbac
 const addCalendarController = new AddCalendarController();
 const addCalendarCallbackController = new AddCalendarCallbackController();
 
-googleCalendarRoutes.get(
-  "/add-to-google-calendar",
-  addCalendarController.handle
-);
-googleCalendarRoutes.get(
-  "/add-to-google-calendar-callback",
-  addCalendarCallbackController.handle
-);
+googleCalendarRoutes.get("/add-to-google-calendar", addCalendarController.handle);
+googleCalendarRoutes.get("/add-to-google-calendar-callback", addCalendarCallbackController.handle);
 
 export default googleCalendarRoutes;
