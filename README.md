@@ -1,8 +1,44 @@
-### Mentoring Platform API
+# Mentoring Platform API
 
 Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois públicos distintos: pessoas que possuem habilidades e estão dispostas a oferecer mentoria, e pessoas que precisam de mentoria nessas habilidades. 
 
-# Recursos da API
+
+### Estrutura do projeto
+
+Optei por usar uma arquitetura monolítica modular, pois assim consigo separar minha aplicação em diferentes módulos, garantindo uma organização clara e modular, tornando mais fácil de entender e navegar pelo código.
+
+- `src/`: Contém todo o código fonte da aplicação.
+
+	- `modules`: Aqui se encontra os módulos funcionais da aplicação. Cada módulo possui sua própria pasta com seus componentes, como por exemplo: controllers, services, domain, etc.
+
+		`<Nome do módulo>`
+		- `contants`: Contém frases relevantes para o usuário;
+		- `controllers`: Recebem os dados do usuário, chamam a camada de serviço e retornam uma resposta ao usuário;
+		- `domain`: Contém as interfaces das entidades e classes com regras de negócio específicas;
+		- `dtos`: Definem a forma dos dados transferidos;
+		- `entities`: Representam os modelos de dados mapeados para as tabelas do banco de dados;
+		- `repositories`: Interfaces e implementações para acesso a dados do banco de dados;
+		- `routes`: Contém as rotas do módulo;
+		- `services`: Contém a lógica de negócios e chamam o repositório.
+	
+	- `shared`: Contém arquivos que são compartilhados entre os módulos.
+		
+		- `container`: Configura a injeção de dependência usando tsyringe.
+		- `middlewares`: Middlewares globais, como por exemplo: autenticação ou garantir se o usuário tem permissão para acessar um determinado recurso;
+		- `routes`: Ponto central para chamar as rotas de cada módulo;
+		- `typeorm`: Configuração para se conectar ao banco de dados;
+		- `utils`: Funções comuns e reutilizáveis;
+		- **app**: Configuração da aplicação;
+		- **server**: Inicia o servidor em determinada porta.
+
+### Como me localizar no projeto
+
+- Todas as rotas estão em ./src/shared/routes;
+- A configuração para se conectar ao banco de dados usando typeorm está em: `./src/shared/typeorm`;
+- A configuração para iniciar o servidor com express está em: `./src/shared/app.ts`
+
+
+### Recursos da API
 
 * **Authentication**
 
