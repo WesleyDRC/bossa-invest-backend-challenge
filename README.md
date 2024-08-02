@@ -65,6 +65,12 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	Usei JOI para validar dados de entrada, garantindo que os dados estejam no formato esperado antes de passar para os controllers.
 
 
+### Pontos a melhorar
+	
+* Validar todos os dados de entrada;
+* Testes unitários.
+
+
 ### Estrutura do projeto
 
 Optei por usar uma arquitetura monolítica modular, pois assim consigo separar minha aplicação em diferentes módulos, garantindo uma organização clara e modular, tornando mais fácil de entender e navegar pelo código.
