@@ -70,6 +70,8 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 * Validar todos os dados de entrada;
 * Testes unitários.
 
+### Modelo Conceitual do banco de dados
+![preview](./.github/conceptual-model.png)
 
 ### Estrutura do projeto
 
@@ -459,7 +461,7 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Endpoint: GET /mentoring/:sessionId
 
 	Params:
-	sessionId <string> - ID da sessão de mentoria que deseja atualizar.
+	- sessionId=<string> // ID da sessão de mentoria que deseja atualizar.
 
 	Headers:
 	Authorization: Bearer <token>
