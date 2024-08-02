@@ -96,8 +96,8 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 		- `routes`: Ponto central para chamar as rotas de cada módulo;
 		- `typeorm`: Configuração para se conectar ao banco de dados;
 		- `utils`: Funções comuns e reutilizáveis;
-		- **app**: Configuração da aplicação;
-		- **server**: Inicia o servidor em determinada porta.
+	- **app**: Configuração da aplicação;
+	- **server**: Inicia o servidor em determinada porta.
 
 ### Como me localizar no projeto
 
