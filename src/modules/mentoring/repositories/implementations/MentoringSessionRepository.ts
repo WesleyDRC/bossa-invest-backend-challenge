@@ -123,4 +123,33 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
 
     return mentoringSessions;
   }
+
+  async updateMentoringStatus({ sessionId, mentorId, status }): Promise<IMentoringSession> {
+    await this.ormRepository
+      .createQueryBuilder()
+      .update(MentoringSession)
+      .set({ status })
+      .where("id = :id", { id: sessionId })
+      .execute();
+
+    const mentoringSession = await this.ormRepository
+    .createQueryBuilder("mentoring_session")
+    .leftJoinAndSelect("mentoring_session.mentee", "mentee")
+    .leftJoinAndSelect("mentoring_session.mentor", "mentor")
+    .leftJoinAndSelect("mentoring_session.skills", "skills")
+    .where("mentoring_session.id = :id", { id: sessionId })
+    .andWhere("mentor.id = :mentorId", { mentorId })
+    .getOne();
+
+    return {
+      id: mentoringSession.id,
+      mentorId: mentoringSession.mentor.id,
+      menteeId: mentoringSession.mentee.id,
+      hourStart: mentoringSession.hourStart,
+      hourEnd: mentoringSession.hourEnd,
+      skills: mentoringSession.skills,
+      status: mentoringSession.status,
+      scheduledAt: mentoringSession.scheduledAt,
+    };
+  }
 }

@@ -18,11 +18,11 @@ app.use(express.json());
 
 app.use(routes);
 
-app.use(errors());
-
 app.use((req, res, next) => {
   res.status(404).json({ message: "Route not found" });
 });
+
+app.use(errors);
 
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   if (err instanceof AppError) {

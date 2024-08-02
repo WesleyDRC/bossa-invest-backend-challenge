@@ -6,4 +6,5 @@ export interface IMentoringSessionRepository {
   findMentoringSessionByHour({ mentorId, startAt, endAt }): Promise<IMentoringSession | null>;
   findById(id: string): Promise<IMentoringSession>;
   findUserMentoringSessions(userId: string): Promise<IMentoringSession[]>;
+  updateMentoringStatus({sessionId, mentorId, status}): Promise<IMentoringSession>;
 }

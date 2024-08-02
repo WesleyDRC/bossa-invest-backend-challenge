@@ -6,6 +6,7 @@ import { CreateMentorAvailabilityController } from "../controllers/CreateMentorA
 import { CreateMentoringAssessmentController } from "../controllers/CreateMentoringAssessmentController";
 import { GetAvailableMentoringBySkillController } from "../controllers/GetAvailableMentoringBySkillController";
 import { GetUserMentoringSessionsController } from "../controllers/GetUserMentoringSessionsController";
+import { UpdateMentoringStatusController } from "../controllers/UpdateMentoringStatusController";
 
 import ensureAuthenticated from "../../../shared/middlewares/ensureAuthenticated";
 import ensureMentor from "../../../shared/middlewares/ensureMentor";
@@ -18,8 +19,9 @@ const createMentorAvailabilityController = new CreateMentorAvailabilityControlle
 const createMentoringAssessmentController = new CreateMentoringAssessmentController();
 const getAvailableMentoringBySkillController = new GetAvailableMentoringBySkillController();
 const getUserMentoringSessionsController = new GetUserMentoringSessionsController();
+const updateMentoringStatusController = new UpdateMentoringStatusController();
 
-const createMentoringSessionSchema = Joi.object({
+const createMentoringSessionBodySchema = Joi.object({
   mentorId: Joi.string().required(),
   skills: Joi.array().items(Joi.string()).required(),
   hourStart: Joi.string()
@@ -42,12 +44,27 @@ const createMentoringSessionSchema = Joi.object({
     }),
 });
 
+const updateMentoringSessionBodySchema = Joi.object({
+  status: Joi.string().required().valid("scheduled", "completed", "canceled").messages({
+    "string.empty": "O status da sessão não pode estar vazio.",
+    "any.required": "O status da sessão é obrigatório.",
+    'any.only': 'O status deve ser um dos seguintes valores: scheduled, completed, canceled.',
+  }),
+});
+
+const updateMentoringSessionParamsSchema = Joi.object({
+  sessionId: Joi.string().required().messages({
+    "string.empty": "O ID da sessão não pode estar vazio.",
+    "any.required": "O ID da sessão é obrigatório.",
+  }),
+});
+
 mentoringRoutes.post(
   "/",
   ensureAuthenticated,
   ensureMentee,
   celebrate({
-    [Segments.BODY]: createMentoringSessionSchema,
+    [Segments.BODY]: createMentoringSessionBodySchema,
   }),
   createMentoringSessionController.handle
 );
@@ -69,6 +86,18 @@ mentoringRoutes.get(
   ensureAuthenticated,
   getAvailableMentoringBySkillController.handle
 );
+
 mentoringRoutes.get("/user/", ensureAuthenticated, getUserMentoringSessionsController.handle);
+
+mentoringRoutes.patch(
+  "/:sessionId",
+  ensureAuthenticated,
+  ensureMentor,
+  celebrate({
+    [Segments.PARAMS]: updateMentoringSessionParamsSchema,
+    [Segments.BODY]: updateMentoringSessionBodySchema,
+  }),
+  updateMentoringStatusController.handle
+);
 
 export default mentoringRoutes;

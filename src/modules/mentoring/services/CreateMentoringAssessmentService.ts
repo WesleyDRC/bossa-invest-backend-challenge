@@ -61,7 +61,7 @@ export class CreateMentoringAssessmentService {
     );
 
     if (!userParticipatedMentoring) {
-      throw new AppError(mentoringConstants.MENTEE_NOT_PARTICIPATE_MENTORING, 404);
+      throw new AppError(mentoringConstants.USER_NOT_PARTICIPATE_MENTORING, 404);
     }
 
     const mentorAssesment = await this.mentoringAssessmentRepository.create({

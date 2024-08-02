@@ -6,5 +6,5 @@ export const mentoringConstants = {
 	SESSION_NOT_FOUND: "Sessão de mentoria não encontrada.",
 	ALREADY_EXISTS_ASSESSMENT: "Já existe uma avaliação nessa mentoria.",
 	SESSION_IS_NOT_OVER: "A sessão de mentoria não acabou.",
-	MENTEE_NOT_PARTICIPATE_MENTORING: "Usuário não participou da mentoria."
+	USER_NOT_PARTICIPATE_MENTORING: "Usuário não participou da mentoria."
 }
