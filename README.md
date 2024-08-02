@@ -3,6 +3,38 @@
 Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois públicos distintos: pessoas que possuem habilidades e estão dispostas a oferecer mentoria, e pessoas que precisam de mentoria nessas habilidades. 
 
 
+### Como configurar o projeto
+
+#### **Requisitos**
+
+[Instalação do Node](https://nodejs.org/en/download/package-manager)
+
+[Instalação do Docker](https://docs.docker.com/engine/install/)
+
+[Instação do Git](https://git-scm.com/download/win)
+
+#### **Etapas**
+
+1. Clonar o repositório.
+	```
+	git clone https://github.com/WesleyDRC/bossa-invest-backend-challenge.git
+	```
+2. Instalar dependências.
+	```
+	npm install
+	```
+
+3. Crie `.env` na raiz do projeto e cole o **conteúdo** `.env.example` nele.
+
+4. Para **rodar** o banco de dados **MySQL** com **Docker**, digite o comando abaixo no terminal na raiz do repositório.
+	```
+	docker compose up -d --build
+	```
+
+5. Para **rodar** a aplicação, digite o comando abaixo no terminal na raiz do repositório.
+	```
+	npm start
+	```
 ### Estrutura do projeto
 
 Optei por usar uma arquitetura monolítica modular, pois assim consigo separar minha aplicação em diferentes módulos, garantindo uma organização clara e modular, tornando mais fácil de entender e navegar pelo código.
