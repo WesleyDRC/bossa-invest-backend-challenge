@@ -1,4 +1,4 @@
-import { inject, injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe";
 
 import { IUserRepository } from "../../users/repositories/IUserRepository";
 import { IMentorAvailabilityRepository } from "../repositories/IMentorAvailabilityRepository";
@@ -10,61 +10,55 @@ import { mentoringConstants } from "../contants/mentoringContants";
 
 @injectable()
 export class CreateMentorAvailabilityService {
+  constructor(
+    @inject("MentorAvailabilityRepository")
+    private mentorAvailabilityRepository: IMentorAvailabilityRepository,
 
-	constructor(
-		@inject("MentorAvailabilityRepository")
-		private mentorAvailabilityRepository: IMentorAvailabilityRepository,
+    @inject("UserRepository")
+    private userRepository: IUserRepository
+  ) {}
 
-		@inject("UserRepository")
-		private userRepository: IUserRepository,
-	) { }
+  async execute({ mentorId, hourStart, hourEnd, availableDay }) {
+    const foundMentor = await this.userRepository.findById(mentorId);
 
-	async execute({
-		mentorId,
-		hourStart,
-		hourEnd,
-		availableDay
-	}) {
+    if (!foundMentor) {
+      throw new AppError(userConstants.NOT_FOUND, 404);
+    }
 
-		const foundMentor = await this.userRepository.findById(mentorId)
+    const hourStartMinutes = convertHourStringToMinutes(hourStart);
+    const hourEndMinutes = convertHourStringToMinutes(hourEnd);
 
-		if (!foundMentor) {
-			throw new AppError(userConstants.NOT_FOUND, 404)
-		}
+    if (hourEndMinutes < hourStartMinutes) {
+      throw new AppError(mentoringConstants.HOURS_ERROR, 403);
+    }
 
-		const hourStartMinutes = convertHourStringToMinutes(hourStart);
-		const hourEndMinutes = convertHourStringToMinutes(hourEnd);
+    const existingAvailabilities =
+      await this.mentorAvailabilityRepository.getAvailabilityByMentorIdAndDate({
+        mentorId,
+        availableDay,
+      });
 
-		if (hourEndMinutes < hourStartMinutes) {
-			throw new AppError(mentoringConstants.HOURS_ERROR, 403)
-		}
+    const alreadyExistsTime = existingAvailabilities.some((availability) => {
+      const availabilityStart = convertHourStringToMinutes(availability.hourStart);
+      const availabilityEnd = convertHourStringToMinutes(availability.hourEnd);
 
-		const existingAvailabilities = await this.mentorAvailabilityRepository.getAvailabilityByMentorIdAndDate({
-			mentorId,
-			availableDay
-		})
+      return (
+        (hourStartMinutes >= availabilityStart && hourStartMinutes <= availabilityEnd) ||
+        (hourEndMinutes >= availabilityStart && hourEndMinutes <= availabilityEnd)
+      );
+    });
 
-		const alreadyExistsTime = existingAvailabilities.some(availability => {
-			const availabilityStart = convertHourStringToMinutes(availability.hourStart);
-			const availabilityEnd = convertHourStringToMinutes(availability.hourEnd);
+    if (alreadyExistsTime) {
+      throw new AppError(mentoringConstants.TIME_IS_ALREADY_BOOKED, 400);
+    }
 
-			return (
-				(hourStartMinutes >= availabilityStart && hourStartMinutes <= availabilityEnd) ||
-				(hourEndMinutes >= availabilityStart && hourEndMinutes <= availabilityEnd)
-			)
-		});
+    const mentorAvailability = await this.mentorAvailabilityRepository.create({
+      mentor: foundMentor,
+      hourStart: convertHourStringToMinutes(hourStart),
+      hourEnd: convertHourStringToMinutes(hourEnd),
+      availableDay,
+    });
 
-		if (alreadyExistsTime) {
-			throw new AppError(mentoringConstants.TIME_IS_ALREADY_BOOKED, 400);
-		}
-
-		const mentorAvailability= await this.mentorAvailabilityRepository.create({
-			mentor: foundMentor,
-			hourStart: convertHourStringToMinutes(hourStart),
-			hourEnd: convertHourStringToMinutes(hourEnd),
-			availableDay
-		})
-
-		return mentorAvailability
-	}
+    return mentorAvailability;
+  }
 }

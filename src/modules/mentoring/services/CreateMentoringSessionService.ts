@@ -29,14 +29,7 @@ export class CreateMentoringSessionService {
     private skillRepository: ISkillRepository
   ) {}
 
-  async execute({
-    mentorId,
-    menteeId,
-    skills,
-    hourStart,
-    hourEnd,
-    scheduledAt,
-  }) {
+  async execute({ mentorId, menteeId, skills, hourStart, hourEnd, scheduledAt }) {
     const foundMentor = await this.userRepository.findById(mentorId);
 
     if (!foundMentor) {
@@ -67,16 +60,13 @@ export class CreateMentoringSessionService {
       throw new AppError(userConstants.MENTOR_SKILL_NOT_FOUND, 404);
     }
 
-    const mentorAvailability =
-      await this.mentorAvailabilityRepository.getAvailabilityByMentorId(
-        mentorId
-      );
-
-    const isAvailableDay = mentorAvailability.find(
-      (avaiability: IMentorAvailability) => {
-        return avaiability.availableDay === scheduledAt;
-      }
+    const mentorAvailability = await this.mentorAvailabilityRepository.getAvailabilityByMentorId(
+      mentorId
     );
+
+    const isAvailableDay = mentorAvailability.find((avaiability: IMentorAvailability) => {
+      return avaiability.availableDay === scheduledAt;
+    });
 
     if (!isAvailableDay) {
       throw new AppError(mentoringConstants.UNAVAILABLE_MENTORING, 404);
@@ -85,31 +75,25 @@ export class CreateMentoringSessionService {
     const startAt = convertHourStringToMinutes(hourStart);
     const endAt = convertHourStringToMinutes(hourEnd);
 
-    const hourStartMentoringAvailable = convertHourStringToMinutes(
-      isAvailableDay.hourStart
-    );
-    const hourEndMentoringAvailable = convertHourStringToMinutes(
-      isAvailableDay.hourEnd
-    );
+    const hourStartMentoringAvailable = convertHourStringToMinutes(isAvailableDay.hourStart);
+    const hourEndMentoringAvailable = convertHourStringToMinutes(isAvailableDay.hourEnd);
 
     if (endAt <= startAt) {
       throw new AppError(mentoringConstants.HOURS_ERROR, 403);
     }
 
     if (
-      (startAt >= hourStartMentoringAvailable &&
-        startAt >= hourEndMentoringAvailable) ||
+      (startAt >= hourStartMentoringAvailable && startAt >= hourEndMentoringAvailable) ||
       endAt > hourEndMentoringAvailable
     ) {
       throw new AppError(mentoringConstants.FAILED_SCHEDULE, 400);
     }
 
-    const overlappingSession =
-      await this.mentoringSessionRepository.findMentoringSessionByHour({
-        mentorId,
-        startAt,
-        endAt,
-      });
+    const overlappingSession = await this.mentoringSessionRepository.findMentoringSessionByHour({
+      mentorId,
+      startAt,
+      endAt,
+    });
 
     if (overlappingSession) {
       throw new AppError(mentoringConstants.TIME_IS_ALREADY_BOOKED, 400);

@@ -9,102 +9,104 @@ import { AppDataSource } from "../../../../shared/typeorm";
 import { convertMinutesToHourString } from "../../../../shared/utils/convert-minutes-to-hour-string";
 
 export class MentorAvailabilityRepository implements IMentorAvailabilityRepository {
+  private ormRepository: Repository<MentorAvailability>;
 
-	private ormRepository: Repository<MentorAvailability>
+  constructor() {
+    this.ormRepository = AppDataSource.getRepository(MentorAvailability);
+  }
 
-	constructor() {
-		this.ormRepository = AppDataSource.getRepository(MentorAvailability)
-	}
+  async create({
+    mentor,
+    hourStart,
+    hourEnd,
+    availableDay,
+  }: IStoreMentorAvailabilityDto): Promise<IMentorAvailability> {
+    const mentorAvailability = this.ormRepository.create({
+      mentor,
+      hourStart,
+      hourEnd,
+      availableDay,
+    });
 
-	async create({
-		mentor,
-		hourStart,
-		hourEnd,
-		availableDay
-	}: IStoreMentorAvailabilityDto): Promise<IMentorAvailability> {
+    await this.ormRepository.save(mentorAvailability);
 
-		const mentorAvailability = this.ormRepository.create({
-			mentor,
-			hourStart,
-			hourEnd,
-			availableDay
-		})
+    return {
+      id: mentorAvailability.id,
+      mentorId: mentorAvailability.mentor.id,
+      hourStart: convertMinutesToHourString(mentorAvailability.hourStart),
+      hourEnd: convertMinutesToHourString(mentorAvailability.hourEnd),
+      availableDay: mentorAvailability.availableDay,
+      isAvailable: mentorAvailability.isAvailable,
+    };
+  }
 
-		await this.ormRepository.save(mentorAvailability)
+  async getAvailabilityByMentorId(mentorId: string): Promise<IMentorAvailability[] | []> {
+    const mentorAvailabilityFound = await this.ormRepository
+      .createQueryBuilder("mentor_availability")
+      .leftJoinAndSelect("mentor_availability.mentor", "user")
+      .where("user.id = :id", { id: mentorId })
+      .getMany();
 
-		return {
-			id: mentorAvailability.id,
-			mentorId: mentorAvailability.mentor.id,
-			hourStart: convertMinutesToHourString(mentorAvailability.hourStart),
-			hourEnd: convertMinutesToHourString(mentorAvailability.hourEnd),
-			availableDay: mentorAvailability.availableDay,
-			isAvailable: mentorAvailability.isAvailable
-		}
-	}
+    const mentorAvailability = mentorAvailabilityFound.map((availability) => {
+      return {
+        id: availability.id,
+        mentorId: availability.mentor.id,
+        hourStart: convertMinutesToHourString(availability.hourStart),
+        hourEnd: convertMinutesToHourString(availability.hourEnd),
+        availableDay: availability.availableDay,
+        isAvailable: availability.isAvailable,
+      };
+    });
 
-	async getAvailabilityByMentorId(mentorId: string): Promise<IMentorAvailability[] | []> {
-		const mentorAvailabilityFound = await this.ormRepository.createQueryBuilder('mentor_availability')
-			.leftJoinAndSelect('mentor_availability.mentor', 'user')
-			.where('user.id = :id', { id: mentorId })
-			.getMany();
+    return mentorAvailability;
+  }
 
-		const mentorAvailability = mentorAvailabilityFound.map((availability) => {
-			return {
-				id: availability.id,
-				mentorId: availability.mentor.id,
-				hourStart: convertMinutesToHourString(availability.hourStart),
-				hourEnd: convertMinutesToHourString(availability.hourEnd),
-				availableDay: availability.availableDay,
-				isAvailable: availability.isAvailable
-			}
-		})
+  async getAvailabilityByMentorIdAndDate({
+    mentorId,
+    availableDay,
+  }): Promise<IMentorAvailability[]> {
+    const availabilitiesFound = await this.ormRepository
+      .createQueryBuilder("mentor_availability")
+      .leftJoinAndSelect("mentor_availability.mentor", "user")
+      .where("user.id = :id", { id: mentorId })
+      .andWhere("mentor_availability.availableDay = :availableDay", { availableDay })
+      .getMany();
 
-		return mentorAvailability
-	}
+    const availabilities = availabilitiesFound.map((availability) => {
+      return {
+        id: availability.id,
+        mentorId: availability.mentor.id,
+        hourStart: convertMinutesToHourString(availability.hourStart),
+        hourEnd: convertMinutesToHourString(availability.hourEnd),
+        availableDay: availability.availableDay,
+        isAvailable: availability.isAvailable,
+      };
+    });
 
-	async getAvailabilityByMentorIdAndDate({ mentorId, availableDay }): Promise<IMentorAvailability[]> {
-		const availabilitiesFound = await this.ormRepository
-			.createQueryBuilder('mentor_availability')
-			.leftJoinAndSelect('mentor_availability.mentor', 'user')
-			.where('user.id = :id', { id: mentorId })
-			.andWhere('mentor_availability.availableDay = :availableDay', { availableDay })
-			.getMany();
+    return availabilities;
+  }
 
-		const availabilities = availabilitiesFound.map((availability) => {
-			return {
-				id: availability.id,
-				mentorId: availability.mentor.id,
-				hourStart: convertMinutesToHourString(availability.hourStart),
-				hourEnd: convertMinutesToHourString(availability.hourEnd),
-				availableDay: availability.availableDay,
-				isAvailable: availability.isAvailable
-			}
-		})
+  async getAvailableMentorsBySkill(skill: string): Promise<IMentorAvailability[]> {
+    const availableMentoringFound = await this.ormRepository
+      .createQueryBuilder("mentor_availability")
+      .leftJoinAndSelect("mentor_availability.mentor", "user")
+      .leftJoinAndSelect("user.skills", "skill")
+      .where("skill.name = :skill", { skill })
+      .andWhere("user.role = :role", { role: "mentor" })
+      .andWhere("mentor_availability.isAvailable = :available", { available: true })
+      .getMany();
 
-		return availabilities
-	}
+    const mentoringAvailable = availableMentoringFound.map((availability) => {
+      return {
+        id: availability.id,
+        mentorId: availability.mentor.id,
+        hourStart: convertMinutesToHourString(availability.hourStart),
+        hourEnd: convertMinutesToHourString(availability.hourEnd),
+        availableDay: availability.availableDay,
+        isAvailable: availability.isAvailable,
+      };
+    });
 
-	async getAvailableMentorsBySkill(skill: string): Promise<IMentorAvailability[]> {
-		const availableMentoringFound = await this.ormRepository
-			.createQueryBuilder("mentor_availability")
-			.leftJoinAndSelect('mentor_availability.mentor', 'user')
-			.leftJoinAndSelect('user.skills', 'skill')
-			.where('skill.name = :skill', { skill })
-			.andWhere('user.role = :role', { role: 'mentor' })
-			.andWhere('mentor_availability.isAvailable = :available', { available: true })
-			.getMany()
-
-		const mentoringAvailable = availableMentoringFound.map((availability) => {
-			return {
-				id: availability.id,
-				mentorId: availability.mentor.id,
-				hourStart: convertMinutesToHourString(availability.hourStart),
-				hourEnd: convertMinutesToHourString(availability.hourEnd),
-				availableDay: availability.availableDay,
-				isAvailable: availability.isAvailable
-			}
-		})
-
-		return mentoringAvailable
-	}
+    return mentoringAvailable;
+  }
 }

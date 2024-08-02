@@ -6,7 +6,6 @@ import { IStoreMentoringSessionDto } from "../../dtos/IStoreMentoringSessionDto"
 
 import { MentoringSession } from "../../entities/MentoringSession";
 import { AppDataSource } from "../../../../shared/typeorm";
-import { convertMinutesToHourString } from "../../../../shared/utils/convert-minutes-to-hour-string";
 
 export class MentoringSessionRepository implements IMentoringSessionRepository {
   private ormRepository: Repository<MentoringSession>;
@@ -46,21 +45,17 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
     };
   }
 
-  async findMentoringSessionByHour({
-    mentorId,
-    startAt,
-    endAt,
-  }): Promise<IMentoringSession> {
+  async findMentoringSessionByHour({ mentorId, startAt, endAt }): Promise<IMentoringSession> {
     const mentoringSession = await this.ormRepository
       .createQueryBuilder("mentoring_session")
       .leftJoinAndSelect("mentoring_session.mentor", "mentor")
       .leftJoinAndSelect("mentoring_session.mentee", "mentee")
       .leftJoinAndSelect("mentoring_session.skills", "skills")
       .where("mentor.id = :id", { id: mentorId })
-      .andWhere(
-        ":startAt <= mentoring_session.hourEnd AND :endAt >= mentoring_session.hourStart",
-        { startAt, endAt }
-      )
+      .andWhere(":startAt <= mentoring_session.hourEnd AND :endAt >= mentoring_session.hourStart", {
+        startAt,
+        endAt,
+      })
       .getOne();
 
     if (!mentoringSession) {
@@ -100,5 +95,32 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
       status: mentoringSession.status,
       scheduledAt: mentoringSession.scheduledAt,
     };
+  }
+
+  async findUserMentoringSessions(userId: string): Promise<IMentoringSession[]> {
+    const mentoringSessionsFound = await this.ormRepository
+      .createQueryBuilder("mentoring_session")
+      .leftJoinAndSelect("mentoring_session.mentee", "mentee")
+      .leftJoinAndSelect("mentoring_session.mentor", "mentor")
+      .leftJoinAndSelect("mentoring_session.skills", "skills")
+      .where("(mentoring_session.mentee.id = :id OR mentoring_session.mentor.id = :id)", {
+        id: userId,
+      })
+      .getMany();
+
+    const mentoringSessions = mentoringSessionsFound.map((mentoringSession) => {
+      return {
+        id: mentoringSession.id,
+        mentorId: mentoringSession.mentor.id,
+        menteeId: mentoringSession.mentee.id,
+        hourStart: mentoringSession.hourStart,
+        hourEnd: mentoringSession.hourEnd,
+        skills: mentoringSession.skills,
+        status: mentoringSession.status,
+        scheduledAt: mentoringSession.scheduledAt,
+      };
+    });
+
+    return mentoringSessions;
   }
 }

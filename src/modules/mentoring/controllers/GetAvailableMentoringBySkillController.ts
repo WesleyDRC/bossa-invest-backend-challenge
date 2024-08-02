@@ -6,18 +6,19 @@ import { GetAvailableMentoringBySkillService } from "../services/GetAvailableMen
 import { AppError } from "../../../shared/errors/AppError";
 
 export class GetAvailableMentoringBySkillController {
-	public async handle(request: Request, response: Response): Promise<Response> {
+  public async handle(request: Request, response: Response): Promise<Response> {
+    const skill = request.query.skill;
 
-		const skill = request.query.skill;
+    if (!skill) {
+      throw new AppError("Skill is required", 400);
+    }
 
-		if (!skill) {
-			throw new AppError("Skill is required", 400)
-		}
+    const getAvailableMentoringBySkillService = container.resolve(
+      GetAvailableMentoringBySkillService
+    );
 
-		const getAvailableMentoringBySkillService = container.resolve(GetAvailableMentoringBySkillService)
+    const mentoringAvailable = await getAvailableMentoringBySkillService.execute({ skill });
 
-		const mentoringAvailable = await getAvailableMentoringBySkillService.execute({ skill })
-
-		return response.json({ mentoringAvailable })
-	}
+    return response.json({ mentoringAvailable });
+  }
 }
