@@ -163,8 +163,8 @@ describe("CreateMentoringSessionService", () => {
       id: "10",
       mentorId: "1",
       menteeId: "2",
-      hourStart: 600,
-      hourEnd: 720,
+      hourEnd: "12:00",
+      hourStart: "10:00",
       skills: [{ id: "1", name: "javascript" }],
       status: "scheduled",
       scheduledAt: "2024-08-02",
@@ -175,8 +175,8 @@ describe("CreateMentoringSessionService", () => {
         mentorId: "1",
         menteeId: "2",
         skills: ["javascript"],
-        hourStart: "10:30",
-        hourEnd: "11:30",
+        hourStart: "10:00",
+        hourEnd: "12:00",
         scheduledAt: "2024-08-02",
       })
     ).resolves.toEqual(expectedResult);

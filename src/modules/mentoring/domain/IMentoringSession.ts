@@ -8,8 +8,8 @@ export interface IMentoringSession {
   id: string;
   mentorId: string;
   menteeId: string;
-  hourStart: number;
-  hourEnd: number;
+  hourStart: number | string;
+  hourEnd: number | string;
   skills: any;
   status: MentoringStatus;
   scheduledAt: string;

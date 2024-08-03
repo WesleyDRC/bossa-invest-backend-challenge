@@ -8,6 +8,7 @@ import { ISkill } from "../../skills/domain/ISkill";
 
 import { AppError } from "../../../shared/errors/AppError";
 import { convertHourStringToMinutes } from "../../../shared/utils/convert-hour-string-to-minutes";
+import { convertMinutesToHourString } from "../../../shared/utils/convert-minutes-to-hour-string";
 
 import { userConstants } from "../../users/constants/userConstants";
 import { mentoringConstants } from "../contants/mentoringContants";
@@ -112,6 +113,9 @@ export class CreateMentoringSessionService {
       hourEnd: convertHourStringToMinutes(hourEnd),
       scheduledAt: scheduledAt,
     });
+
+    mentoringSession.hourStart = convertMinutesToHourString(Number(mentoringSession.hourStart))
+    mentoringSession.hourEnd = convertMinutesToHourString(Number(mentoringSession.hourEnd))
 
     return mentoringSession;
   }
