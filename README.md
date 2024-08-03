@@ -39,6 +39,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 	npm test
 	```
+7. Exporte o arquivo **JSON** localizado na pasta `insomnia` dentro do Insomnia para realizar as consultas.
 
 ### Decisões
 
