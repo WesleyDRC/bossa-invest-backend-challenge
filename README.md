@@ -126,13 +126,13 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"email": "string", 
-		"password": "string"
+		"email": "string", // Nome do usuário.
+		"password": "string" // Senha do usuário.
 	}
 
 	Output:
 	{
-		"token": "string"
+		"token": "string" // Token JWT
 	}
 	```
 
@@ -147,16 +147,23 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"name": "string", 
-		"email": "string", 
-		"password":"string", 
-		"confirmPassword": "string",
-		"role": "string" // "mentor" ou "mentee"
+		"name": "string", // Nome do usuário.
+		"email": "string", // O endereço de email do usuário. 
+		"password":"string", // A senha do usuário.
+		"confirmPassword": "string", // Confirmação da senha do usuário.
+		"role": "string" // Pode ser "mentor" ou "mentee".
 	}
 
 	Output:
 	{
-		"token": "string"
+		"user": {
+			"id": "string", // ID do usuário.
+			"name": "string", // Nome do usuário criado.
+			"email": "string", // O endereço de email do usuário criado. 
+			"role": "string", // Papel do usuário criado.
+			"created_at": "string", // Data e hora em que o usuário foi criado.
+			"updated_at": "string" // Data e hora da última atualização do usuário.
+		} 
 	}
 	```
 2. Adicionar skill ao mentor.
@@ -174,24 +181,24 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"skillName": "string"
+		"skillName": "string" // O nome da habilidade a ser adicionada ao mentor.
 	}
 
 	Output:
 	{
 		"user": {
-			"id": "string"
-			"name": "string"
-			"email": "string",
-			"role": "string",
+			"id": "string" // ID do usuário.
+			"name": "string" // Nome do usuário criado.
+			"email": "string", // O endereço de email do usuário criado. 
+			"role": "string", // Papel do usuário na plataforma de mentoria (mentor ou mentee).
 			"skills": [
 				{
-					"id": "string",
-					"name": "string"
+					"id": "string", // ID da habilidade.
+					"name": "string" // Nome da habilidade.
 				}
 			],
-			"created_at": "string",
-			"updated_at": "string"
+			"created_at": "string", // Data e hora em que o usuário foi criado.
+			"updated_at": "string" // Data e hora da última atualização do usuário.
 		}
 	}
 	```
@@ -211,8 +218,8 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	{
 		"skills": [
 			{
-				"id": "0cd27a81-7492-411a-8526-703b4c44dd19",
-				"name": "javascript"
+				"id": "string", // ID da habilidade.
+				"name": "string" // Nome da habilidade.
 			}
 		]
 	}
@@ -232,16 +239,16 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	{
 		"mentors": [
 			{
-				"id": "string",
-				"name": "string",
-				"email": "string",
-				"role": "string",
-				"created_at": "string",
-				"updated_at": "string",
+				"id": "string", // ID do mentor.
+				"name": "string", // Nome do mentor.
+				"email": "string", // Email do mentor.
+				"role": "string", // Papel do mentor (mentor).
+				"created_at": "string",  // Data e hora em que o mentor foi criado.
+				"updated_at": "string", // Data e hora em que o mentor foi atualizado.
 				"skills": [
 					{
-						"id": "string",
-						"name": "string"
+						"id": "string", // ID da habilidade.
+						"name": "string" // Nome da habilidade.
 					}
 				]
 			}
@@ -261,14 +268,14 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"name": "string"
+		"name": "string" // Nome da habilidade
 	}
 
 	Output:
 	{
 		"skill": {
-			"id": "string",
-			"name": "string"
+			"id": "string", // ID da habilidade criada.
+			"name": "string" // Nome da habilidade criada.
 		}
 	}
 	```
@@ -283,8 +290,8 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	{
 		"skills": [
 			{
-				"id": "string",
-				"name": "string"
+				"id": "string", // ID da habilidade.
+				"name": "string" // Nome da habilidade.
 			}
 		]
 	}
@@ -308,20 +315,20 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-			"hourStart": "string",
-			"hourEnd": "string",
-			"availableDay": "string"
+			"hourStart": "string", // Hora de início da disponibilidade no formato "00:00".
+			"hourEnd": "string", Hora de término da disponibilidade no formato "00:00".
+			"availableDay": "string" // Dia disponível no padrão DD-MM-YYYY.
 	}
 
 	Output:
 	{
 		"mentoringAvailable": {
-			"id": "string",
-			"mentorId": "string",
-			"hourStart": "string",
-			"hourEnd": "string",
-			"availableDay": "string",
-			"isAvailable": "boolean"
+			"id": "string", // ID da disponibilidade da mentoria.
+			"mentorId": "string", // ID do mentor.
+			"hourStart": "string", // Hora de início criado.
+			"hourEnd": "string", // Hora de término criado.
+			"availableDay": "string", // Dia disponível criado.
+			"isAvailable": "boolean" // Indica se a disponibilidade está ativa.
 		}
 	}
 	```
@@ -341,31 +348,31 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"mentorId": "string",
-		"hourStart": "string",
-		"hourEnd": "string",
+		"mentorId": "string", // ID do mentor.
+		"hourStart": "string", // Hora de início da mentoria.
+		"hourEnd": "string", // Hora de término da mentoria.
 		"skills": [
-			"string"
+			"string" // Nome da habilidade que deseja mentoria.
 		],
-		"scheduledAt": "string"
+		"scheduledAt": "string" // Data que deseja agendar a mentoria.
 	}
 
 	Output:
 	{
 		"mentoringSession": {
-			"id": "string",
-			"mentorId": "string",
-			"menteeId": "string",
-			"hourStart": "number",
-			"hourEnd": "number",
+			"id": "string", // ID da sessão da mentoria.
+			"mentorId": "string", // ID do mentor da sessão.
+			"menteeId": "string", // ID do mentorado da sessão.
+			"hourStart": "number", // Hora de início da mentoria.
+			"hourEnd": "number", // Hora de término da mentoria.
 			"skills": [
 				{
-					"id": "string",
-					"name": "string"
+					"id": "string", // ID da habilidade.
+					"name": "string" // Nome da habilidade.
 				}
 			],
-			"status": "string",
-			"scheduledAt": "string"
+			"status": "string", // Status da sessão de mentoria 
+			"scheduledAt": "string" // Data que a mentoria foi agendada.
 		}
 	}
 	```
@@ -384,19 +391,19 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"grade": number,
-		"comment": "string",
-		"sessionId": "string"
+		"grade": number, // Nota que deseja dar a mentoria.
+		"comment": "string", // Comentário sobre a mentoria.
+		"sessionId": "string" // ID da sessão da mentoria.
 	}
 
 	Output:
 	{
 		"mentoringAssessment": {
-			"id": "string",
-			"grade": number,
-			"comment": "string.",
-			"menteeId": "string",
-			"sessionId": "string"
+			"id": "string", // ID da avaliação.
+			"grade": number, // Nota dada à mentoria.
+			"comment": "string.", // Comentário sobre a mentoria.
+			"menteeId": "string", // ID do mentorado que avaliou.
+			"sessionId": "string" // ID da sessão da mentoria que está sendo avaliada.
 		}
 	}
 	```
@@ -414,12 +421,12 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	{
 		"mentoringAvailable": [
 			{
-				"id": "string",
-				"mentorId": "string",
-				"hourStart": "string",
-				"hourEnd": "string",
-				"availableDay": "string",
-				"isAvailable": boolean
+				"id": "string", // ID da disponibilidade da mentoria.
+				"mentorId": "string", // ID do mentor.
+				"hourStart": "string", // Hora de início criado.
+				"hourEnd": "string", // Hora de término criado.
+				"availableDay": "string", // Dia disponível criado.
+				"isAvailable": boolean // Indica se a disponibilidade está ativa.
 			}
 		]
 	}
@@ -438,19 +445,19 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	{
 		"mentoringSessions": [
 			{
-				"id": "string",
-				"mentorId": "string",
-				"menteeId": "string",
-				"hourStart": number,
-				"hourEnd": number,
+				"id": "string", // ID da sessão da mentoria.
+				"mentorId": "string", // ID do mentor da sessão.
+				"menteeId": "string", // ID do mentorado da sessão.
+				"hourStart": number, // Hora de início da mentoria.
+				"hourEnd": number, // Hora de término da mentoria.
 				"skills": [
 					{
-						"id": "string"",
-						"name": "string"
+						"id": "string"", // ID da habilidade.
+						"name": "string" // Nome da habilidade.
 					}
 				],
-				"status": "string",
-				"scheduledAt": "string"
+				"status": "string", // Status da sessão de mentoria 
+				"scheduledAt": "string" // Data que a mentoria foi agendada.
 			}
 		]
 	}
@@ -473,25 +480,25 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 	Input:
 	Body Type: JSON
 	{
-		"status": "string"
+		"status": "string" // Status que deseja atualizar (scheduled, completed, canceled)
 	}
 
 	Output:
 	{
 		"mentoringSession": {
-			"id": "string",
-			"mentorId": "string",
-			"menteeId": "string",
-			"hourStart": number,
-			"hourEnd": number,
+			"id": "string", // ID da sessão da mentoria.
+			"mentorId": "string", // ID do mentor da sessão.
+			"menteeId": "string", // ID do mentorado da sessão.
+			"hourStart": number, // Hora de início da mentoria.
+			"hourEnd": number, // Hora de término da mentoria.
 			"skills": [
 				{
-					"id": "string",
-					"name": "string"
+					"id": "string", // ID da habilidade.
+					"name": "string" // Nome da habilidade.
 				}
 			],
-			"status": "string",
-			"scheduledAt": "string"
+			"status": "string", // Status da sessão de mentoria.
+			"scheduledAt": "string" // Data que a mentoria foi agendada.
 		}
 	}
 	```
