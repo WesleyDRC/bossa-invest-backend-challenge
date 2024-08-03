@@ -52,7 +52,7 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 
 * **Por que MySQL?**
 
-	Escolhi MySQL como meu banco de dados, por ser um banco de dados amplamente utilizado e possuir uma boa interface gráfica para gerenciamento( MySQL Workbench). Minhas experiências anteriores com MySQL em outros projetos também contribuiu para uma configuração mais tranquila.
+	Escolhi MySQL como meu banco de dados, por ser um banco de dados amplamente utilizado e possuir uma boa interface gráfica para gerenciamento( MySQL Workbench ). Minhas experiências anteriores com MySQL em outros projetos também contribuiram para uma configuração mais tranquila.
 
 
 * **Por que TypeORM?**
