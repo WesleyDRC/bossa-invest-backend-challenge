@@ -508,7 +508,11 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 * Calendar
 1. Adicionar ao Google Calendar
 
-		**Descrição:**  Adiciona uma sessão de mentoria à agenda do usuário no Google Calendar. O processo envolve duas etapas: autenticação e adição do evento.
+	**ATENÇÃO**
+
+	Como estou usando a API do Google em um ambiente de teste, eu preciso adicionar o seu e-mail para que você consiga adicionar a mentoria à sua agenda do Google Calendar. Qualquer dúvida, entre em contato comigo.*
+
+	**Descrição:**  Adiciona uma sessão de mentoria à agenda do usuário no Google Calendar. O processo envolve duas etapas: autenticação e adição do evento.
 
 		1°Etapa - Autenticação
 
