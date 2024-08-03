@@ -35,6 +35,10 @@ Backend para uma plataforma de mentorias. Onde o objetivo é atender a dois púb
 	```
 	npm start
 	```
+6. Para **rodar** os testes, digite o comando abaixo no terminal na raiz do repositório. 
+	```
+	npm test
+	```
 
 ### Decisões
 
