@@ -105,6 +105,8 @@ Optei por usar uma arquitetura monolítica modular, pois assim consigo separar m
 		- `utils`: Funções comuns e reutilizáveis;
 	- **app**: Configuração da aplicação;
 	- **server**: Inicia o servidor em determinada porta.
+- `tests`: Contém os testes unitários da aplicação.
+
 
 ### Como me localizar no projeto
 
