@@ -1,4 +1,4 @@
-export function formatDateTime(scheduledAt: Date, hourStart: string, hourEnd: string) {
+export function formatDateTime(scheduledAt: string, hourStart: string, hourEnd: string) {
   const localStartDateTime = new Date(`${scheduledAt}T${hourStart}:00`);
   const localEndDateTime = new Date(`${scheduledAt}T${hourEnd}:00`);
 
