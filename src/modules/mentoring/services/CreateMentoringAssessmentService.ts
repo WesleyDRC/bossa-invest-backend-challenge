@@ -64,6 +64,13 @@ export class CreateMentoringAssessmentService {
       throw new AppError(mentoringConstants.USER_NOT_PARTICIPATE_MENTORING, 404);
     }
 
+    if(grade < 0) {
+      throw new AppError(mentoringConstants.MIN_GRADE, 400);
+    }
+    if(grade > 10) {
+      throw new AppError(mentoringConstants.MAX_GRADE, 400);
+    }
+
     const mentorAssesment = await this.mentoringAssessmentRepository.create({
       grade,
       comment,

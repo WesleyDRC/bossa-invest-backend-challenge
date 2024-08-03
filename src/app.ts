@@ -39,6 +39,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
       err.details.get("query") ||
       err.details.get("params") ||
       err.details.get("headers");
+
     if (errorDetails) {
       return response.status(400).json({
         status: "error",

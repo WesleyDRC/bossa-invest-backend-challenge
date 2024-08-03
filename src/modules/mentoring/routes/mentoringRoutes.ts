@@ -48,7 +48,7 @@ const updateMentoringSessionBodySchema = Joi.object({
   status: Joi.string().required().valid("scheduled", "completed", "canceled").messages({
     "string.empty": "O status da sessão não pode estar vazio.",
     "any.required": "O status da sessão é obrigatório.",
-    'any.only': 'O status deve ser um dos seguintes valores: scheduled, completed, canceled.',
+    "any.only": "O status deve ser um dos seguintes valores: scheduled, completed, canceled.",
   }),
 });
 
@@ -57,6 +57,21 @@ const updateMentoringSessionParamsSchema = Joi.object({
     "string.empty": "O ID da sessão não pode estar vazio.",
     "any.required": "O ID da sessão é obrigatório.",
   }),
+});
+
+const createMentoringAssessmentBodySchema = Joi.object({
+  grade: Joi.number().integer().required().messages({
+    "number.integer": "Grade deve ser um número inteiro.",
+    "any.required": "O campo nota da mentoria é obrigatório.",
+  }),
+  comment: Joi.string().required().messages({
+    "string.empty": "Escreva um comentário sobre a mentoria.",
+    "any.required": "O comment é obrigatório.",
+  }),
+  sessionId: Joi.string().required().messages({
+    "string.empty": "O ID da sessão não pode estar vazio.",
+    "any.required": "O ID da sessão é obrigatório.",
+  })
 });
 
 mentoringRoutes.post(
@@ -79,6 +94,9 @@ mentoringRoutes.post(
   "/assessment",
   ensureAuthenticated,
   ensureMentee,
+  celebrate({
+    [Segments.BODY]: createMentoringAssessmentBodySchema,
+  }),
   createMentoringAssessmentController.handle
 );
 mentoringRoutes.get(
