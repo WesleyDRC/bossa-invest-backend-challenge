@@ -1,4 +1,5 @@
-import { Skill } from "../../skills/entities/Skill";
+//import { Skill } from "../../skills/entities/Skill";
+import { ISkill } from "../../skills/domain/ISkill";
 
 enum UserType {
   MENTOR = "mentor",
@@ -11,7 +12,7 @@ export interface IUser {
   email: string;
   password: string;
   role: UserType;
-  skills?: Skill[] | [];
+  skills?: ISkill[] | [];
   created_at: Date;
   updated_at: Date;
 }

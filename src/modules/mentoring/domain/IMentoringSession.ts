@@ -12,5 +12,5 @@ export interface IMentoringSession {
   hourEnd: number;
   skills: any;
   status: MentoringStatus;
-  scheduledAt: Date;
+  scheduledAt: string;
 }

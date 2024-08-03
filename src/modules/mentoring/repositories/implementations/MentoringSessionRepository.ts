@@ -41,7 +41,7 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
       hourEnd: mentoringSession.hourEnd,
       skills: mentoringSession.skills,
       status: mentoringSession.status,
-      scheduledAt: mentoringSession.scheduledAt,
+      scheduledAt: mentoringSession.scheduledAt.toString()
     };
   }
 
@@ -70,7 +70,7 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
       hourEnd: mentoringSession.hourEnd,
       skills: mentoringSession.skills,
       status: mentoringSession.status,
-      scheduledAt: mentoringSession.scheduledAt,
+      scheduledAt: mentoringSession.scheduledAt.toString(),
     };
   }
 
@@ -93,7 +93,7 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
       hourEnd: mentoringSession.hourEnd,
       skills: mentoringSession.skills,
       status: mentoringSession.status,
-      scheduledAt: mentoringSession.scheduledAt,
+      scheduledAt: mentoringSession.scheduledAt.toString()
     };
   }
 
@@ -117,7 +117,7 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
         hourEnd: mentoringSession.hourEnd,
         skills: mentoringSession.skills,
         status: mentoringSession.status,
-        scheduledAt: mentoringSession.scheduledAt,
+        scheduledAt: mentoringSession.scheduledAt.toString(),
       };
     });
 
@@ -149,7 +149,7 @@ export class MentoringSessionRepository implements IMentoringSessionRepository {
       hourEnd: mentoringSession.hourEnd,
       skills: mentoringSession.skills,
       status: mentoringSession.status,
-      scheduledAt: mentoringSession.scheduledAt,
+      scheduledAt: mentoringSession.scheduledAt.toString(),
     };
   }
 }

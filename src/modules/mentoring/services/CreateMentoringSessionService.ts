@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 
 import { IMentoringSessionRepository } from "../repositories/IMentoringSessionRepository";
 import { IUserRepository } from "../../users/repositories/IUserRepository";
-import { ISkillRepository } from "../../skills/repositories/ISkillRepository";
 import { IMentorAvailabilityRepository } from "../repositories/IMentorAvailabilityRepository";
 import { IMentorAvailability } from "../domain/IMentorAvailability";
 import { ISkill } from "../../skills/domain/ISkill";
@@ -12,6 +11,15 @@ import { convertHourStringToMinutes } from "../../../shared/utils/convert-hour-s
 
 import { userConstants } from "../../users/constants/userConstants";
 import { mentoringConstants } from "../contants/mentoringContants";
+
+interface ExecuteParams {
+  mentorId: string;
+  menteeId: string;
+  skills: string[];
+  hourStart: string;
+  hourEnd: string;
+  scheduledAt: string;
+}
 
 @injectable()
 export class CreateMentoringSessionService {
@@ -24,12 +32,9 @@ export class CreateMentoringSessionService {
 
     @inject("UserRepository")
     private userRepository: IUserRepository,
-
-    @inject("SkillRepository")
-    private skillRepository: ISkillRepository
   ) {}
 
-  async execute({ mentorId, menteeId, skills, hourStart, hourEnd, scheduledAt }) {
+  async execute({ mentorId, menteeId, skills, hourStart, hourEnd, scheduledAt }: ExecuteParams) {
     const foundMentor = await this.userRepository.findById(mentorId);
 
     if (!foundMentor) {
@@ -65,7 +70,7 @@ export class CreateMentoringSessionService {
     );
 
     const isAvailableDay = mentorAvailability.find((avaiability: IMentorAvailability) => {
-      return avaiability.availableDay === scheduledAt;
+      return avaiability.availableDay.toString() === scheduledAt;
     });
 
     if (!isAvailableDay) {

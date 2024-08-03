@@ -3,6 +3,6 @@ export interface IMentorAvailability {
   mentorId: string;
   hourStart: string;
   hourEnd: string;
-  availableDay: Date;
+  availableDay: string;
   isAvailable: boolean;
 }

@@ -35,7 +35,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
       mentorId: mentorAvailability.mentor.id,
       hourStart: convertMinutesToHourString(mentorAvailability.hourStart),
       hourEnd: convertMinutesToHourString(mentorAvailability.hourEnd),
-      availableDay: mentorAvailability.availableDay,
+      availableDay: mentorAvailability.availableDay.toString(),
       isAvailable: mentorAvailability.isAvailable,
     };
   }
@@ -53,7 +53,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
         mentorId: availability.mentor.id,
         hourStart: convertMinutesToHourString(availability.hourStart),
         hourEnd: convertMinutesToHourString(availability.hourEnd),
-        availableDay: availability.availableDay,
+        availableDay: availability.availableDay.toString(),
         isAvailable: availability.isAvailable,
       };
     });
@@ -78,7 +78,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
         mentorId: availability.mentor.id,
         hourStart: convertMinutesToHourString(availability.hourStart),
         hourEnd: convertMinutesToHourString(availability.hourEnd),
-        availableDay: availability.availableDay,
+        availableDay: availability.availableDay.toString(),
         isAvailable: availability.isAvailable,
       };
     });
@@ -102,7 +102,7 @@ export class MentorAvailabilityRepository implements IMentorAvailabilityReposito
         mentorId: availability.mentor.id,
         hourStart: convertMinutesToHourString(availability.hourStart),
         hourEnd: convertMinutesToHourString(availability.hourEnd),
-        availableDay: availability.availableDay,
+        availableDay: availability.availableDay.toString(),
         isAvailable: availability.isAvailable,
       };
     });

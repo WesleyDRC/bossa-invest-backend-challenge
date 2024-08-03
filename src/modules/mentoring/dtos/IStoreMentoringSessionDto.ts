@@ -7,5 +7,5 @@ export interface IStoreMentoringSessionDto {
   skills: ISkill[] | [];
   hourStart: number;
   hourEnd: number;
-  scheduledAt: Date;
+  scheduledAt: string;
 }
