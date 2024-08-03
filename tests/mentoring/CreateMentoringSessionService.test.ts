@@ -9,6 +9,8 @@ import { IUserRepository } from "../../src/modules/users/repositories/IUserRepos
 
 import { convertHourStringToMinutes } from "../../src/shared/utils/convert-hour-string-to-minutes";
 
+import { userConstants } from "../../src/modules/users/constants/userConstants";
+
 enum UserType {
   MENTOR = "mentor",
   MENTEE = "mentee",
@@ -178,5 +180,140 @@ describe("CreateMentoringSessionService", () => {
         scheduledAt: "2024-08-02",
       })
     ).resolves.toEqual(expectedResult);
+  });
+
+  it("should throw an error if the mentor is not found", async () => {
+    const mockMentee = {
+      id: "2",
+      name: "Test Mentee",
+      email: "test_mentee@gmail.com",
+      password: "wesley123",
+      role: UserType.MENTEE,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    userRepositoryMock.findById.mockResolvedValueOnce(mockMentee);
+
+    const expectedResult = {
+      message: userConstants.NOT_FOUND,
+      metadata: undefined,
+      statusCode: 404,
+    };
+
+    await expect(
+      createMentoringSessionService.execute({
+        mentorId: "1",
+        menteeId: "2",
+        skills: ["javascript"],
+        hourStart: "10:30",
+        hourEnd: "11:30",
+        scheduledAt: "2024-08-02",
+      })
+    ).rejects.toEqual(expectedResult);
+  });
+
+  it("should throw an error if the mentee is not found", async () => {
+    const mockMentor = {
+      id: "1",
+      name: "Test Mentor",
+      email: "test_mentor@gmail.com",
+      password: "wesley123",
+      role: UserType.MENTEE,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    userRepositoryMock.findById.mockResolvedValueOnce(mockMentor);
+
+    const expectedResult = {
+      message: userConstants.NOT_FOUND,
+      metadata: undefined,
+      statusCode: 404,
+    };
+
+    await expect(
+      createMentoringSessionService.execute({
+        mentorId: "1",
+        menteeId: "2",
+        skills: ["javascript"],
+        hourStart: "10:30",
+        hourEnd: "11:30",
+        scheduledAt: "2024-08-02",
+      })
+    ).rejects.toEqual(expectedResult);
+  });
+
+  it("should throw error if the mentor dos not have the skill", async () => {
+    const mockMentor = {
+      id: "1",
+      name: "Test Mentor",
+      email: "test_mentor@gmail.com",
+      password: "wesley123",
+      role: UserType.MENTOR,
+      skills: [
+        {
+          id: "2",
+          name: "javascript",
+        },
+      ],
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    const mockMentee = {
+      id: "2",
+      name: "Test Mentee",
+      email: "test_mentee@gmail.com",
+      password: "wesley123",
+      role: UserType.MENTEE,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    const mockMentorSkill = {
+      id: "1",
+      name: "wesley",
+      email: "test_mentor@gmail.com",
+      password: "wesley123",
+      role: UserType.MENTOR,
+      skills: [
+        {
+          id: "1",
+          name: "javascript",
+        },
+      ],
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+
+    const mockSkills = [
+      {
+        id: "1",
+        name: "HTML",
+      },
+    ];
+
+    userRepositoryMock.findById.mockResolvedValueOnce(mockMentor);
+    userRepositoryMock.findById.mockResolvedValueOnce(mockMentee);
+    userRepositoryMock.addSkillUser.mockResolvedValue(mockMentorSkill);
+    userRepositoryMock.getUserSkills.mockResolvedValue(mockSkills);
+
+    const expectedResult = {
+      message: userConstants.MENTOR_SKILL_NOT_FOUND,
+      metadata: undefined,
+      statusCode: 404,
+    };
+
+    await expect(
+      createMentoringSessionService.execute({
+        mentorId: "1",
+        menteeId: "2",
+        skills: ["javascript"],
+        hourStart: "10:30",
+        hourEnd: "11:30",
+        scheduledAt: "2024-08-02",
+      })
+    ).rejects.toEqual(expectedResult);
   });
 });
